@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div><span></span></div>
     <label for="submission"> submission : </label>
     <input v-model="submission" type="text" id="submission" name="submission" />
     <button @click="submit">submit</button>
@@ -17,6 +18,11 @@ export default {
       submission: "",
       count: 0,
     };
+  },
+  computed: {
+    lowerSubmission() {
+      return this.submission.toLowerCase().trim();
+    },
   },
   methods: {
     insultInputBox() {
@@ -38,19 +44,10 @@ export default {
       }
       document.querySelector("#game").insertAdjacentHTML("beforeend", template);
     },
-    equalToAnswer() {
-      if (this.answer === this.submission) {
-        alert("you win");
-        const gameDiv = document.querySelector("#game");
-        while (gameDiv.hasChildNodes()) {
-          gameDiv.removeChild(gameDiv.firstChild);
-        }
-      }
-    },
     setColor() {
       const inputs = document.querySelectorAll(".input");
       for (let i = 0; i < this.answer.length; i++) {
-        inputs[i].value = this.submission[i];
+        inputs[i].value = this.lowerSubmission[i];
         if (inputs[i].value === this.answer[i]) {
           inputs[i].style.background = "green";
         } else if (this.answer.includes(inputs[i].value)) {
@@ -60,11 +57,20 @@ export default {
         }
         inputs[i].classList.remove("input");
       }
-      this.equalToAnswer();
+    },
+    equalToAnswer() {
+      if (this.answer === this.lowerSubmission) {
+        alert("you win");
+        const gameDiv = document.querySelector("#game");
+        while (gameDiv.hasChildNodes()) {
+          gameDiv.removeChild(gameDiv.firstChild);
+        }
+      }
     },
     submit() {
       this.insultInputBox();
       this.setColor();
+      this.equalToAnswer();
       this.submission = "";
       this.count++;
     },
