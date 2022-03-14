@@ -35,7 +35,7 @@ export default {
       })
         .then((response) => {
           sessionStorage.setItem("me", response.data.me);
-          sessionStorage.setItem("socketUrl", response.data.socketUrl);
+          sessionStorage.setItem("roomId", response.data.roomId);
           sessionStorage.setItem("opponent", response.data.opponent);
           this.$router.push({ name: "Match" });
         })

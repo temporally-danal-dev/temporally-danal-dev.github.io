@@ -22,6 +22,7 @@ export default {
       myNickname: "",
       opponentNickname: "",
       stompClient: null,
+      roomId: "",
     };
   },
   methods: {
@@ -41,6 +42,13 @@ export default {
       const body = JSON.parse(res.body);
       this.injectInputBox();
       this.setColor(body);
+      if (body.nickname === this.me) {
+        wordInput.disabled = true;
+        console.log("opponent turn");
+      } else {
+        wordInput.disabled = false;
+        console.log("your turn");
+      }
     },
     onEnd(res) {
       const body = JSON.parse(res.body);
@@ -50,13 +58,17 @@ export default {
       this.stompClient = null;
     },
     onConnected() {
-      this.stompClient.subscribe("/start", this.onStart);
-      this.stompClient.subscribe("/submit", this.onSubmit);
-      this.stompClient.subscribe("/end", this.onEnd);
+      this.stompClient.subscribe(`/sub/${this.roomId}/start`, this.onStart);
+      this.stompClient.subscribe(`/sub/${this.roomId}/submit`, this.onSubmit);
+      this.stompClient.subscribe(`/sub/${this.roomId}/end`, this.onEnd);
       const msg = {
         nickname: this.me,
       };
-      this.stompClient.send("/join", JSON.stringify(msg), {});
+      this.stompClient.send(
+        `/pub/${this.roomId}/join`,
+        JSON.stringify(msg),
+        {}
+      );
     },
     onFailed(error) {
       console.log("socket connection failed");
@@ -90,14 +102,14 @@ export default {
         nickname: this.me,
         word: this.word,
       };
-      this.stompClient.send("/submit", JSON.stringify(msg));
+      this.stompClient.send(`/pub/${roomId}/submit`, JSON.stringify(msg));
     },
   },
   beforeMount() {
-    const socketUrl = sessionStorage.getItem("socketUrl");
+    this.roomId = sessionStorage.getItem("roomId");
     this.me = sessionStorage.getItem("me");
     this.opponent = sessionStorage.getItem("opponent");
-    const socket = new SockJs(socketUrl);
+    const socket = new SockJs("socketUrl");
     this.stompClient = stomp.over(socket);
     this.stompClient.connect({}, this.onConnected, this.onFailed);
   },
