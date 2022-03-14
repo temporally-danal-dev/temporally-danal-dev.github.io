@@ -1,27 +1,33 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '@/views/Home.vue'
-import Game from '@/views/Game.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "@/views/Home.vue";
+import Tutorial from "@/views/Tutorial.vue";
+import Match from "@/views/Match.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    component: Home,
   },
   {
-    path:'/game',
-    name:'Game',
-    component: Game
-  }
-]
+    path: "/tutorial",
+    name: "Tutorial",
+    component: Tutorial,
+  },
+  {
+    path: "/match",
+    name: "Match",
+    component: Match,
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
