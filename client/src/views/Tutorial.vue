@@ -25,23 +25,13 @@ export default {
     },
   },
   methods: {
-    insultInputBox() {
+    injectInputBox() {
       let template;
-      if (this.count % 2 === 0) {
-        template =
-          "<div>" +
-          "<br>" +
-          `<span>=></span>` +
-          '<input class="input boxInput" disabled>'.repeat(this.answer.length) +
-          "</div>";
-      } else {
-        template =
-          "<div>" +
-          "<br>" +
-          '<input class="input boxInput" disabled>'.repeat(this.answer.length) +
-          `<span><=</span>` +
-          "</div>";
-      }
+      template =
+        "<div>" +
+        "<br>" +
+        '<input class="input boxInput" disabled>'.repeat(this.answer.length) +
+        "</div>";
       document.querySelector("#game").insertAdjacentHTML("beforeend", template);
     },
     setColor() {
@@ -68,7 +58,7 @@ export default {
       }
     },
     submit() {
-      this.insultInputBox();
+      this.injectInputBox();
       this.setColor();
       this.equalToAnswer();
       this.submission = "";
