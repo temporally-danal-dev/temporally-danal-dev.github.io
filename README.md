@@ -1,5 +1,6 @@
 # Wordle Battle
 
+|---|---|---|---|
 |---|---|client(request)|server(response)|
 |api|POST mainUrl/matching|---|body {me: Str, roomId: Str, opponent: Str}|
 |socket|join|{nickname: Str}|---|
