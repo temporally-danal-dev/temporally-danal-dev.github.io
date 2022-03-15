@@ -82,7 +82,6 @@ export default {
     },
     checkGuess() {
       this.insertInput();
-      console.log(this.guessCount);
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
       let guessString = "";
       let rightGuess = Array.from(this.answer);
@@ -116,8 +115,6 @@ export default {
             // shade box yellow
             letterColor = "yellow";
           }
-
-          rightGuess[letterPosition] = "#";
         }
 
         let delay = 250 * i;
