@@ -30,10 +30,11 @@ export default {
     fetchMatch() {
       this.injectWaiting();
       axios({
-        method: "POST",
-        url: "mainUrl/matching",
+        method: "GET",
+        url: "http://localhost:8080/matching",
       })
         .then((response) => {
+          console.log(response)
           sessionStorage.setItem("me", response.data.me);
           sessionStorage.setItem("roomId", response.data.roomId);
           sessionStorage.setItem("opponent", response.data.opponent);

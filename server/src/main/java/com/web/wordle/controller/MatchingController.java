@@ -1,24 +1,27 @@
 package com.web.wordle.controller;
 
+import com.web.wordle.dto.MatchingResponse;
 import com.web.wordle.service.MatchingService;
 import com.web.wordle.util.ServletUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
+@AllArgsConstructor
 @RequestMapping("/matching")
 public class MatchingController {
 
-    @Autowired
-    MatchingService matchingService;
+    private MatchingService matchingService;
 
     @GetMapping
     @ResponseBody
-    public DeferredResult<String> join(){
+    public DeferredResult<MatchingResponse> join(){
+        System.out.println("hi");
         String sessionId = ServletUtil.getSession().getId();
-        final DeferredResult<String> deferredResult = new DeferredResult<>(null);
+        final DeferredResult<MatchingResponse> deferredResult = new DeferredResult<>(null);
         matchingService.join(sessionId,deferredResult);
 
         return deferredResult;
