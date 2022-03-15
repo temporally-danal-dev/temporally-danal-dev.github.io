@@ -47,7 +47,6 @@ export default {
   data() {
     return {
       answer: "abcde",
-      count: 0,
       currentGuess: [],
       nextLetter: 0,
       guessCount: 0,
