@@ -52,11 +52,6 @@ export default {
       guessCount: 0,
     };
   },
-  computed: {
-    lowerSubmission() {
-      return this.submission.toLowerCase().trim();
-    },
-  },
   methods: {
     insertLetter(pressedKey) {
       if (this.nextLetter === 5) {
