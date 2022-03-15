@@ -38,9 +38,9 @@ public class GameController {
     @MessageMapping("/{roomId}/submit")
     public void submit(@DestinationVariable String roomId){
         if(true){//게임 속행
-            template.convertAndSend("/sub/" + roomId+"/submit", new SubmitResponse());;
+            template.convertAndSend("/sub/" + roomId+"/submit", new SubmitResponse());
         } else {// 게임 종료
-            template.convertAndSend("/sub/" + roomId+"/end", new EndResponse());;
+            template.convertAndSend("/sub/" + roomId+"/end", new EndResponse());
         }
     }
 }
