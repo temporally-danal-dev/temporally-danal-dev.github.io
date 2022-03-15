@@ -2,7 +2,13 @@
   <div>
     <div><span></span></div>
     <label for="submission"> submission : </label>
-    <input v-model="submission" type="text" id="submission" name="submission" />
+    <input
+      v-model="submission"
+      type="text"
+      id="submission"
+      name="submission"
+      @input="onInput"
+    />
     <button @click="submit">submit</button>
     <div id="game"></div>
   </div>
@@ -11,7 +17,7 @@
 <script>
 // @ is an alias to /src
 export default {
-  name: "Game",
+  name: "Tutorial",
   data() {
     return {
       answer: "abcde",
@@ -25,7 +31,13 @@ export default {
     },
   },
   methods: {
-    injectInputBox() {
+    onInput() {
+      console.log("onInput");
+      const inputs = document.querySelectorAll(".input");
+      inputs[this.submission.length - 1].value =
+        this.submission[this.submission.length - 1];
+    },
+    insertInputBox() {
       let template;
       template =
         "<div>" +
@@ -58,12 +70,15 @@ export default {
       }
     },
     submit() {
-      this.injectInputBox();
+      this.insertInputBox();
       this.setColor();
       this.equalToAnswer();
       this.submission = "";
       this.count++;
     },
+  },
+  mounted() {
+    this.insertInputBox();
   },
 };
 </script>

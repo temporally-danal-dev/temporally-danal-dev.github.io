@@ -40,8 +40,9 @@ export default {
     },
     onSubmit(res) {
       const body = JSON.parse(res.body);
-      this.injectInputBox();
+      this.insertInputBox();
       this.setColor(body);
+      const wordInput = document.querySelector("#word");
       if (body.nickname === this.me) {
         wordInput.disabled = true;
         console.log("opponent turn");
@@ -74,7 +75,7 @@ export default {
       console.log("socket connection failed");
       console.log(error);
     },
-    injectInputBox() {
+    insertInputBox() {
       let template;
       template =
         "<div>" +
@@ -85,11 +86,11 @@ export default {
     },
     setColor(body) {
       const inputs = document.querySelectorAll(".input");
-      for (let i = 0; i < matchStatus.length; i++) {
+      for (let i = 0; i < body.matchStatus.length; i++) {
         inputs[i].value = body.word[i];
-        if (matchStatus[i] === "2") {
+        if (body.matchStatus[i] === "2") {
           inputs[i].style.background = "green";
-        } else if (matchStatus[i] === "1") {
+        } else if (body.matchStatus[i] === "1") {
           inputs[i].style.background = "yellow";
         } else {
           inputs[i].style.background = "lightgrey";
@@ -102,7 +103,7 @@ export default {
         nickname: this.me,
         word: this.word,
       };
-      this.stompClient.send(`/pub/${roomId}/submit`, JSON.stringify(msg));
+      this.stompClient.send(`/pub/${this.roomId}/submit`, JSON.stringify(msg));
     },
   },
   beforeMount() {
