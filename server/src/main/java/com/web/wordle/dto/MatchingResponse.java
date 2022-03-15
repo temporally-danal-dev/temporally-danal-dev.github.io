@@ -1,9 +1,12 @@
 package com.web.wordle.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class MatchingResponse {
-    String nickname;
-    String channel;
+    String me;
+    String opponent;
+    String roomId;
 }
