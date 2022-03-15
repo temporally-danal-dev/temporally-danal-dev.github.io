@@ -17,7 +17,7 @@ import axios from "axios";
 export default {
   name: "Home",
   methods: {
-    injectWaiting() {
+    insertWaiting() {
       const waiting = document.querySelector("h2");
       if (waiting === null) {
         let template;
@@ -28,7 +28,7 @@ export default {
       }
     },
     fetchMatch() {
-      this.injectWaiting();
+      this.insertWaiting();
       axios({
         method: "GET",
         url: "http://localhost:8080/matching",

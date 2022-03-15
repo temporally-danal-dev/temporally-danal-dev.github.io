@@ -50,6 +50,5 @@ public class GameController {
         } else {// 게임 종료
             log.info("END");
             template.convertAndSend("/sub/" + roomId+"/end", new EndResponse(submitRequest.getNickname(),submitRequest.getWord()));;
-        }
     }
 }
