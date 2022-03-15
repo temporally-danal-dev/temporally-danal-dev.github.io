@@ -1,6 +1,7 @@
 package com.web.wordle.service;
 
 import com.web.wordle.dto.*;
+import com.web.wordle.util.GameUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class GameService {
             gameSession = new GameSession();
             gameSession.getPlayerList().add(req.getNickname());
 
-            gameSession.setAnswer("testanswer");
+            gameSession.setAnswer(GameUtil.generateAnswer());
         }
         gameList.put(roomId,gameSession);
         return gameSession;
@@ -58,11 +59,11 @@ public class GameService {
 
     //validation check 지금 submit 한 애가 제대로 된 턴인지 체크
     public boolean validationCheck(String roomId,String nickname){
-        return gameList.get(roomId).getTurn().equals(nickname);
+        return !gameList.get(roomId).getTurn().equals(nickname);
     }
 
     //게임이 끝났는지 체크
     public boolean end(String roomId, String word){
-        return gameList.get(roomId).getAnswer().equals(word);
+        return !gameList.get(roomId).getAnswer().equals(word);
     }
 }

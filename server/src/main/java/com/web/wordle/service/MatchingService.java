@@ -1,21 +1,34 @@
 package com.web.wordle.service;
 
 import com.web.wordle.dto.MatchingResponse;
-import com.web.wordle.util.NicknameUtil;
+import com.web.wordle.util.GameUtil;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import javax.annotation.PostConstruct;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @AllArgsConstructor
 public class MatchingService {
     static Hashtable<String, DeferredResult<MatchingResponse>> pool = new Hashtable<>();
+
+    private Map<String, String> connectedUsers;
+
+    @PostConstruct
+    private void setUp(){
+        connectedUsers = new ConcurrentHashMap<>();
+    }
+
+    public void connectUser(String matchingRoomId, String sessionId) {
+        connectedUsers.put(matchingRoomId,sessionId);
+    }
 
     @Async("asyncTreadPool")
     public void join(String sessionId,DeferredResult<MatchingResponse> deferredResult) {
@@ -30,8 +43,8 @@ public class MatchingService {
         String user1 = itr.next();
         String user2 = itr.next();
 
-        String player1 = NicknameUtil.generateNickname();
-        String player2 = NicknameUtil.generateNickname();
+        String player1 = GameUtil.generateNickname();
+        String player2 = GameUtil.generateNickname();
 
         String uuid = UUID.randomUUID().toString();
 
@@ -42,4 +55,6 @@ public class MatchingService {
         user2Result.setResult(new MatchingResponse(player2,player1,uuid));
 
     }
+
+
 }
