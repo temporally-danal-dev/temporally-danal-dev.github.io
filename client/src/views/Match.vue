@@ -241,10 +241,10 @@ export default {
     },
   },
   mounted() {
-    his.roomId = sessionStorage.getItem("roomId");
+    this.roomId = sessionStorage.getItem("roomId");
     this.me = sessionStorage.getItem("me");
     this.opponent = sessionStorage.getItem("opponent");
-    const socket = new SockJs("ws://localhost:8080");
+    const socket = new SockJs("http://localhost:8080/socket");
     this.stompClient = stomp.over(socket);
     this.stompClient.connect({}, this.onConnected, this.onFailed);
 
