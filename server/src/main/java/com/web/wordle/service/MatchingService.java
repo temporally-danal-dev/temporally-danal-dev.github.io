@@ -19,17 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MatchingService {
     static Hashtable<String, DeferredResult<MatchingResponse>> pool = new Hashtable<>();
 
-    private Map<String, String> connectedUsers;
-
-    @PostConstruct
-    private void setUp(){
-        connectedUsers = new ConcurrentHashMap<>();
-    }
-
-    public void connectUser(String matchingRoomId, String sessionId) {
-        connectedUsers.put(matchingRoomId,sessionId);
-    }
-
     @Async("asyncTreadPool")
     public void join(String sessionId,DeferredResult<MatchingResponse> deferredResult) {
         pool.put(sessionId, deferredResult);
@@ -55,6 +44,4 @@ public class MatchingService {
         user2Result.setResult(new MatchingResponse(player2,player1,uuid));
 
     }
-
-
 }

@@ -1,5 +1,6 @@
 package com.web.wordle.config;
 
+import com.web.wordle.service.GameService;
 import com.web.wordle.service.MatchingService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,11 +19,11 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 @Component
 @AllArgsConstructor
-public class MatchingEventListener {
+public class GameEventListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(MatchingEventListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(GameEventListener.class);
 
-    private MatchingService matchingService;
+    private GameService gameService;
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
@@ -47,7 +48,7 @@ public class MatchingEventListener {
 
         logger.info("[Connected] room id : {} | websocket session id : {}", matchingRoomId, sessionId);
 
-       //matchingService.connectUser(matchingRoomId, sessionId);//여기서 게임 종류 인원에 맞는 작업을 가져와야함
+       gameService.connectUser(matchingRoomId, sessionId);//여기서 게임 종류 인원에 맞는 작업을 가져와야함
     }
 
     @EventListener
@@ -58,6 +59,6 @@ public class MatchingEventListener {
 
         logger.info("[Disconnected] websocket session id : {}", sessionId);
 
-        matchingService.disconnectUser(sessionId);
+        gameService.disconnectUser(sessionId);
     }
 }

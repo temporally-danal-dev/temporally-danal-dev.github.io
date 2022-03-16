@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +16,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameService {
 
     static Map<String, GameSession> gameList = new ConcurrentHashMap<>();
+
+    private Map<String, String> connectedUsers;
+
+    @PostConstruct
+    private void setUp(){
+        connectedUsers = new ConcurrentHashMap<>();
+    }
 
     public synchronized GameSession join(String roomId, JoinRequest req) {
         GameSession gameSession;
@@ -65,5 +73,14 @@ public class GameService {
     //게임이 끝났는지 체크
     public boolean end(String roomId, String word){
         return !gameList.get(roomId).getAnswer().equals(word);
+    }
+
+    public void connectUser(String roomId, String sessionId) {
+        //세션 아이디로 룸아이디 저장
+    }
+
+
+    public void disconnectUser(String sessionId) {
+        //세션에 있는 룸아이디로 전부 end 요청 보내주기.
     }
 }
