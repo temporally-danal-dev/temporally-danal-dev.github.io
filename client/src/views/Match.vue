@@ -64,7 +64,8 @@ export default {
     onStart(res) {
       const body = JSON.parse(res.body);
       this.answerLength = body.answerLength;
-      this.insertBox();
+      const who = this.nickname === body.nickname ? "you" : "opponent";
+      this.insertBox(who);
       if (body.nickname === this.me) {
         this.myTurn = true;
       } else {
@@ -73,8 +74,8 @@ export default {
     },
     onSubmit(res) {
       const body = JSON.parse(res.body);
-      console.log(res.body);
-      this.insertBox();
+      const who = this.nickname === body.nickname ? "you" : "opponent";
+      this.insertBox(who);
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
       for (let i = 0; i < this.answerLength; i++) {
         let letterColor = "";
@@ -239,7 +240,7 @@ export default {
         }
       }
     },
-    insertBox() {
+    insertBox(who) {
       let board = document.getElementById("game-board");
       let row = document.createElement("div");
       row.className = "letter-row";
@@ -250,6 +251,15 @@ export default {
         row.appendChild(box);
       }
 
+      if (who === "you") {
+        const label = document.createElement("span");
+        label.textContent = "you :";
+        row.insertBefore(label, row.firstChild);
+      } else {
+        const label = document.createElement("span");
+        label.textContent = ": opponent";
+        row.appnendChild(label);
+      }
       board.appendChild(row);
     },
   },
@@ -260,7 +270,7 @@ export default {
     const socket = new SockJs("http://localhost:8080/socket");
     this.stompClient = stomp.over(socket);
     this.stompClient.connect(
-      { roomId: this.roomId },
+      { roomId: this.roomId, nickname: this.me },
       this.onConnected,
       this.onFailed
     );
