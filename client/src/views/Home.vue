@@ -2,9 +2,7 @@
   <div id="home">
     <div class="letter-row">
       <div class="letter-box" style="background-color: yellow">W</div>
-      <div class="letter-box" style="background-color: grey; color: white">
-        O
-      </div>
+      <div class="letter-box" style="background-color: grey">O</div>
       <div class="letter-box" style="background-color: green">R</div>
       <div class="letter-box" style="background-color: yellow">D</div>
       <div class="letter-box" style="background-color: yellow">L</div>
@@ -13,7 +11,7 @@
     <div class="letter-row">
       <div class="letter-box" style="background-color: grey">B</div>
       <div class="letter-box" style="background-color: yellow">A</div>
-      <div class="letter-box" style="background-color: yellow">T</div>
+      <div class="letter-box" style="background-color: grey">T</div>
       <div class="letter-box" style="background-color: grey">T</div>
       <div class="letter-box" style="background-color: green">L</div>
       <div class="letter-box" style="background-color: green">E</div>
