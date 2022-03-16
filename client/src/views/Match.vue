@@ -64,12 +64,11 @@ export default {
     onStart(res) {
       const body = JSON.parse(res.body);
       this.answerLength = body.answerLength;
+      this.insertInput();
       if (body.nickname === this.me) {
         this.myTurn = true;
-        console.log("your turn");
       } else {
         this.myTurn = false;
-        console.log("opponent turn");
       }
     },
     onSubmit(res) {
@@ -101,6 +100,12 @@ export default {
       this.guessCount += 1;
       this.currentGuess = [];
       this.nextLetter = 0;
+
+      if (body.nickname === this.me) {
+        this.myTurn = true;
+      } else {
+        this.myTurn = false;
+      }
     },
     onEnd(res) {
       const body = JSON.parse(res.body);
@@ -167,9 +172,11 @@ export default {
         word: guessString,
       };
       this.stompClient.send(`/pub/${this.roomId}/submit`, JSON.stringify(msg));
+
+      this.myTurn = false;
     },
     insertLetter(pressedKey) {
-      if (this.nextLetter === 5) {
+      if (this.nextLetter === this.answerLength) {
         return;
       }
       pressedKey = pressedKey.toLowerCase();
@@ -189,7 +196,6 @@ export default {
       this.currentGuess.pop();
       this.nextLetter -= 1;
     },
-    checkGuess() {},
     shadeKeyBoard(letter, color) {
       for (const elem of document.getElementsByClassName("keyboard-button")) {
         if (elem.textContent === letter) {
@@ -208,22 +214,24 @@ export default {
       }
     },
     onClick(e) {
-      let pressedKey = String(e.target.textContent);
-      if (pressedKey === "Del" && this.nextLetter !== 0) {
-        this.deleteLetter();
-        return;
-      }
+      if (this.myTurn === true) {
+        let pressedKey = String(e.target.textContent);
+        if (pressedKey === "Del" && this.nextLetter !== 0) {
+          this.deleteLetter();
+          return;
+        }
 
-      if (pressedKey === "Enter") {
-        this.checkGuess();
-        return;
-      }
+        if (pressedKey === "Enter") {
+          this.submit();
+          return;
+        }
 
-      let found = pressedKey.match(/[a-z]/gi);
-      if (!found || found.length > 1) {
-        return;
-      } else {
-        this.insertLetter(pressedKey);
+        let found = pressedKey.match(/[a-z]/gi);
+        if (!found || found.length > 1) {
+          return;
+        } else {
+          this.insertLetter(pressedKey);
+        }
       }
     },
     insertInput() {
@@ -231,7 +239,7 @@ export default {
       let row = document.createElement("div");
       row.className = "letter-row";
 
-      for (let j = 0; j < 5; j++) {
+      for (let j = 0; j < this.answerLength; j++) {
         let box = document.createElement("div");
         box.className = "letter-box";
         row.appendChild(box);
@@ -248,24 +256,25 @@ export default {
     this.stompClient = stomp.over(socket);
     this.stompClient.connect({}, this.onConnected, this.onFailed);
 
-    this.insertInput();
     document.addEventListener("keyup", (e) => {
-      let pressedKey = String(e.key);
-      if (pressedKey === "Backspace" && this.nextLetter !== 0) {
-        this.deleteLetter();
-        return;
-      }
+      if (this.myTurn === true) {
+        let pressedKey = String(e.key);
+        if (pressedKey === "Backspace" && this.nextLetter !== 0) {
+          this.deleteLetter();
+          return;
+        }
 
-      if (pressedKey === "Enter") {
-        this.checkGuess();
-        return;
-      }
+        if (pressedKey === "Enter") {
+          this.submit();
+          return;
+        }
 
-      let found = pressedKey.match(/[a-z]/gi);
-      if (!found || found.length > 1) {
-        return;
-      } else {
-        this.insertLetter(pressedKey);
+        let found = pressedKey.match(/[a-z]/gi);
+        if (!found || found.length > 1) {
+          return;
+        } else {
+          this.insertLetter(pressedKey);
+        }
       }
     });
   },
