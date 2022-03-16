@@ -29,12 +29,16 @@ export default {
     },
     fetchMatch() {
       this.insertWaiting();
+      let startNow = new Date();
+      console.log(`axios start: ${startNow.toLocaleTimeString()}`);
       axios({
         method: "GET",
         url: "http://localhost:8080/matching",
       })
         .then((response) => {
-          console.log(response)
+          let arriveNow = new Date();
+          console.log(`axios arrive: ${arriveNow.toLocaleString()}`);
+          console.log(response);
           sessionStorage.setItem("me", response.data.me);
           sessionStorage.setItem("roomId", response.data.roomId);
           sessionStorage.setItem("opponent", response.data.opponent);

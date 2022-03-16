@@ -258,7 +258,7 @@ export default {
       } else {
         const label = document.createElement("span");
         label.textContent = ": opponent";
-        row.appnendChild(label);
+        row.appendChild(label);
       }
       board.appendChild(row);
     },
