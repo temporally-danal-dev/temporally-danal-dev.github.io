@@ -1,6 +1,12 @@
 <template>
   <div id="game-board">
-    <div><h1>Match</h1></div>
+    <div class="letter-row">
+      <div class="letter-box" style="background-color: yellow">M</div>
+      <div class="letter-box" style="background-color: yellow">A</div>
+      <div class="letter-box" style="background-color: green">T</div>
+      <div class="letter-box" style="background-color: green">C</div>
+      <div class="letter-box" style="background-color: yellow">H</div>
+    </div>
     <div id="keyboard-cont">
       <div class="first-row">
         <button class="keyboard-button" @click="onClick">q</button>

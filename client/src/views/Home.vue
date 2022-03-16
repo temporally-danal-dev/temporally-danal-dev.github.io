@@ -1,11 +1,28 @@
 <template>
   <div id="home">
-    <h1>wordle battle</h1>
-    <div>
-      <router-link to="/tutorial">Tutorial</router-link>
+    <div class="letter-row">
+      <div class="letter-box" style="background-color: yellow">W</div>
+      <div class="letter-box" style="background-color: grey; color: white">
+        O
+      </div>
+      <div class="letter-box" style="background-color: green">R</div>
+      <div class="letter-box" style="background-color: yellow">D</div>
+      <div class="letter-box" style="background-color: yellow">L</div>
+      <div class="letter-box" style="background-color: grey">E</div>
     </div>
-    <div>
-      <button @click="fetchMatch">Match</button>
+    <div class="letter-row">
+      <div class="letter-box" style="background-color: grey">B</div>
+      <div class="letter-box" style="background-color: yellow">A</div>
+      <div class="letter-box" style="background-color: yellow">T</div>
+      <div class="letter-box" style="background-color: grey">T</div>
+      <div class="letter-box" style="background-color: green">L</div>
+      <div class="letter-box" style="background-color: green">E</div>
+    </div>
+    <div style="margin-top: 100px">
+      <button @click="goTutorial" class="redirectBtn">Tutorial</button>
+    </div>
+    <div style="margin-top: 20px">
+      <button @click="fetchMatch" class="redirectBtn">Match</button>
     </div>
   </div>
 </template>
@@ -26,6 +43,9 @@ export default {
           .querySelector("#home")
           .insertAdjacentHTML("beforeend", template);
       }
+    },
+    goTutorial() {
+      this.$router.push({ name: "Tutorial" });
     },
     fetchMatch() {
       this.insertWaiting();
@@ -52,3 +72,10 @@ export default {
   },
 };
 </script>
+<style>
+.redirectBtn {
+  width: 100px;
+  height: 50px;
+  font-size: 20px;
+}
+</style>

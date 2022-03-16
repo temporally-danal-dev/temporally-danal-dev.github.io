@@ -1,6 +1,15 @@
 <template>
   <div id="game-board">
-    <div><h1>Tutorial</h1></div>
+    <div class="letter-row">
+      <div class="letter-box" style="background-color: grey">T</div>
+      <div class="letter-box" style="background-color: green">U</div>
+      <div class="letter-box" style="background-color: grey">T</div>
+      <div class="letter-box" style="background-color: green">O</div>
+      <div class="letter-box" style="background-color: grey">R</div>
+      <div class="letter-box" style="background-color: yellow">I</div>
+      <div class="letter-box" style="background-color: yellow">A</div>
+      <div class="letter-box" style="background-color: grey">L</div>
+    </div>
     <div id="keyboard-cont">
       <div class="first-row">
         <button class="keyboard-button" @click="onClick">q</button>

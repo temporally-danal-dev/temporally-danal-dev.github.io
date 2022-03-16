@@ -1,5 +1,8 @@
 <template>
-  <div id="app">
+  <div
+    id="app"
+    style="display: flex; justify-content: center; margin-top: 50px"
+  >
     <router-view />
   </div>
 </template>
