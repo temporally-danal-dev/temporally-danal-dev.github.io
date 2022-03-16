@@ -64,7 +64,7 @@ export default {
     onStart(res) {
       const body = JSON.parse(res.body);
       this.answerLength = body.answerLength;
-      this.insertInput();
+      this.insertBox();
       if (body.nickname === this.me) {
         this.myTurn = true;
       } else {
@@ -74,7 +74,7 @@ export default {
     onSubmit(res) {
       const body = JSON.parse(res.body);
       console.log(res.body);
-      this.insertInput();
+      this.insertBox();
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
       for (let i = 0; i < this.answerLength; i++) {
         let letterColor = "";
@@ -111,7 +111,7 @@ export default {
     },
     onEnd(res) {
       const body = JSON.parse(res.body);
-      this.insertInput();
+      this.insertBox();
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
       for (let i = 0; i < this.answerLength + 1; i++) {
         if (i < this.answerLength) {
@@ -239,7 +239,7 @@ export default {
         }
       }
     },
-    insertInput() {
+    insertBox() {
       let board = document.getElementById("game-board");
       let row = document.createElement("div");
       row.className = "letter-row";
