@@ -258,7 +258,11 @@ export default {
     this.opponent = sessionStorage.getItem("opponent");
     const socket = new SockJs("http://localhost:8080/socket");
     this.stompClient = stomp.over(socket);
-    this.stompClient.connect({}, this.onConnected, this.onFailed);
+    this.stompClient.connect(
+      { roomId: this.roomId },
+      this.onConnected,
+      this.onFailed
+    );
 
     document.addEventListener("keyup", (e) => {
       if (this.myTurn === true) {
