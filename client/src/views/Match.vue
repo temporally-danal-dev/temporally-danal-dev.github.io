@@ -73,6 +73,7 @@ export default {
     },
     onSubmit(res) {
       const body = JSON.parse(res.body);
+      console.log(res.body);
       this.insertInput();
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
       for (let i = 0; i < this.answerLength; i++) {
@@ -93,6 +94,7 @@ export default {
         setTimeout(() => {
           //shade box
           box.style.backgroundColor = letterColor;
+          box.textContent = letter;
           this.shadeKeyBoard(letter, letterColor);
         }, delay);
       }
@@ -161,8 +163,10 @@ export default {
       for (const val of this.currentGuess) {
         guessString += val;
       }
-
-      if (guessString.length !== this.answerLength) {
+      console.log(guessString);
+      console.log(guessString.length);
+      console.log(this.answerLength);
+      if (guessString.length !== parseInt(this.answerLength)) {
         alert("Not enough letters!");
         return;
       }
