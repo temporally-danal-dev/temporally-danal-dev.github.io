@@ -1,6 +1,6 @@
 <template>
   <div id="game-board">
-    <div><h1>Tutorial</h1></div>
+    <div><h1>Match</h1></div>
     <div id="keyboard-cont">
       <div class="first-row">
         <button class="keyboard-button" @click="onClick">q</button>
@@ -123,6 +123,7 @@ export default {
           setTimeout(() => {
             //shade box
             box.style.backgroundColor = letterColor;
+            box.textContent = letter;
             this.shadeKeyBoard(letter, letterColor);
           }, delay);
         } else {
