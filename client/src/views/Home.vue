@@ -1,20 +1,20 @@
 <template>
   <div id="home">
-    <div class="letter-row">
-      <div class="letter-box" style="background-color: yellow">W</div>
-      <div class="letter-box" style="background-color: grey">O</div>
-      <div class="letter-box" style="background-color: green">R</div>
-      <div class="letter-box" style="background-color: yellow">D</div>
-      <div class="letter-box" style="background-color: yellow">L</div>
-      <div class="letter-box" style="background-color: grey">E</div>
+    <div class="title-row">
+      <div class="title-box" style="background-color: yellow">W</div>
+      <div class="title-box" style="background-color: grey">O</div>
+      <div class="title-box" style="background-color: green">R</div>
+      <div class="title-box" style="background-color: yellow">D</div>
+      <div class="title-box" style="background-color: yellow">L</div>
+      <div class="title-box" style="background-color: grey">E</div>
     </div>
-    <div class="letter-row">
-      <div class="letter-box" style="background-color: grey">B</div>
-      <div class="letter-box" style="background-color: yellow">A</div>
-      <div class="letter-box" style="background-color: grey">T</div>
-      <div class="letter-box" style="background-color: grey">T</div>
-      <div class="letter-box" style="background-color: green">L</div>
-      <div class="letter-box" style="background-color: green">E</div>
+    <div class="title-row">
+      <div class="title-box" style="background-color: grey">B</div>
+      <div class="title-box" style="background-color: yellow">A</div>
+      <div class="title-box" style="background-color: grey">T</div>
+      <div class="title-box" style="background-color: grey">T</div>
+      <div class="title-box" style="background-color: green">L</div>
+      <div class="title-box" style="background-color: green">E</div>
     </div>
     <div style="margin-top: 100px">
       <button @click="goTutorial" class="redirectBtn">Tutorial</button>
@@ -75,5 +75,23 @@ export default {
   width: 100px;
   height: 50px;
   font-size: 20px;
+}
+
+.title-row {
+  display: flex;
+}
+
+.title-box {
+  border: 2px solid gray;
+  border-radius: 3px;
+  margin: 2px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  height: 3rem;
+  width: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
 }
 </style>
