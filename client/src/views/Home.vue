@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       key: "",
+      matched: false,
     };
   },
   methods: {
@@ -56,6 +57,7 @@ export default {
     },
     fetchMatch() {
       this.insertWaiting();
+      this.matched = true;
       axios({
         method: "GET",
         url: `http://localhost:8080/matching/${this.key}`,
@@ -65,6 +67,9 @@ export default {
             console.log("timed out");
           } else if (response.data.responseResult === "CANCEL") {
             console.log("canceled");
+            alert("canceled");
+            const waiting = document.querySelector("h2");
+            document.querySelector("#home").remove(waiting);
           } else {
             sessionStorage.setItem("me", response.data.me);
             sessionStorage.setItem("roomId", response.data.roomId);
@@ -84,9 +89,29 @@ export default {
         }, delay);
       }
     },
+    unLoadEvnet(event) {
+      event.preventDefault();
+      event.returnValue = "";
+      if (this.matched) {
+        axios({
+          method: "DELETE",
+          url: `http://localhost:8080/matching/${this.key}`,
+        })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
   },
   beforeMount() {
     this.key = Math.floor(Math.random() * (999999 - 100000)) + 100000;
+    window.addEventListener("beforeunload", this.unLoadEvent);
+  },
+  beforeDestroy() {
+    window.removeEventListener("beforeunload", this.unLoadEvent);
   },
 };
 </script>
