@@ -202,8 +202,8 @@ export default {
         return;
       }
 
-      let found = pressedKey.match(/[a-z]/gi);
-      if (!found || found.length > 1) {
+      let found = /[a-z]/.test(pressedKey);
+      if (!found) {
         return;
       } else {
         this.insertLetter(pressedKey);

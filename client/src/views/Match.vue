@@ -72,6 +72,9 @@ export default {
       this.answerLength = body.answerLength;
       const who = this.nickname === body.nickname ? "you" : "opponent";
       this.insertBox(who);
+      console.log(body.nickname);
+      console.log(this.me);
+      console.log(body.nickname === this.me);
       if (body.nickname === this.me) {
         this.myTurn = true;
       } else {
@@ -238,8 +241,8 @@ export default {
           return;
         }
 
-        let found = pressedKey.match(/[a-z]/gi);
-        if (!found || found.length > 1) {
+        let found = /[a-z]/.test(pressedKey);
+        if (!found) {
           return;
         } else {
           this.insertLetter(pressedKey);
@@ -294,14 +297,18 @@ export default {
           return;
         }
 
-        let found = pressedKey.match(/[a-z]/gi);
-        if (!found || found.length > 1) {
+        let found = /[a-z]/.test(pressedKey);
+        if (!found) {
           return;
         } else {
           this.insertLetter(pressedKey);
         }
       }
     });
+  },
+  beforeRouteLeave() {
+    this.stompClient.disconnect();
+    console.log("disconnected");
   },
 };
 </script>

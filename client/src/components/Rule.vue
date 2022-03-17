@@ -3,9 +3,9 @@
     <button type="button" @click="onClick">Rule</button>
     <div class="modal" v-if="show">
       <div class="modalBody" style="text-align: left">
+        <button @click="onClick" class="closeBtn">X</button>
         <div class="header">
           <h1>Rule</h1>
-          <button @click="onClick" class="closeBtn">X</button>
         </div>
         <hr />
         <div class="body">
@@ -67,8 +67,8 @@ export default {
 
 .modal {
   position: absolute;
-  top: 200px;
-  right: 100px;
+  top: auto;
+  right: auto;
   width: auto;
   height: auto;
 }
@@ -80,8 +80,6 @@ export default {
 
 .closeBtn {
   position: fixed;
-  top: 200px;
-  right: 100px;
   display: inline;
 }
 </style>

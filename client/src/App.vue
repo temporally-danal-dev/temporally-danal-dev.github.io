@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <Rule />
-    <div style="display: flex; justify-content: center; margin-top: 50px">
-      <router-view />
+    <div class="body">
+      <Rule />
+      <div style="display: flex; justify-content: center; margin-top: 50px">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
@@ -25,5 +27,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
