@@ -6,7 +6,12 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class MatchingResponse {
-    String me;
-    String opponent;
-    String roomId;
+    private ResponseResult responseResult;
+    private String me;
+    private String opponent;
+    private String roomId;
+
+    public enum ResponseResult {
+        SUCCESS, CANCEL, TIMEOUT;
+    }
 }

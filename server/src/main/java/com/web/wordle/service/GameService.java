@@ -4,6 +4,7 @@ import com.web.wordle.dto.*;
 import com.web.wordle.util.GameUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameService {
 
     static Map<String, GameSession> gameList = new ConcurrentHashMap<>();
+    private final SimpMessagingTemplate template;
 
     private Map<String, String> connectedUsers;
 
@@ -36,6 +38,7 @@ public class GameService {
 
             gameSession.setAnswer(GameUtil.generateAnswer());
         }
+
         gameList.put(roomId,gameSession);
         return gameSession;
     }
@@ -59,15 +62,18 @@ public class GameService {
             } else {
                 output +="0";
             }
-
         }
 
         return new SubmitResponse(input, output, gameList.get(roomId).changeTurn());
     }
 
     //validation check 지금 submit 한 애가 제대로 된 턴인지 체크
-    public boolean validationCheck(String roomId,String nickname){
+    public boolean validationTurnCheck(String roomId,String nickname){
         return !gameList.get(roomId).getTurn().equals(nickname);
+    }
+
+    public boolean validationLengthCheck(String roomId,String word){
+        return !(gameList.get(roomId).getAnswer().length() == word.length());
     }
 
     //게임이 끝났는지 체크
@@ -77,10 +83,13 @@ public class GameService {
 
     public void connectUser(String roomId, String sessionId) {
         //세션 아이디로 룸아이디 저장
+        connectedUsers.put(sessionId,roomId);
     }
-
 
     public void disconnectUser(String sessionId) {
         //세션에 있는 룸아이디로 전부 end 요청 보내주기.
+        String roomId = connectedUsers.get(sessionId);
+        if(roomId.equals(null) || gameList.get(roomId).equals(null)) return;
+        template.convertAndSend("/sub/" + roomId+"/end", new EndResponse("",gameList.get(roomId).getAnswer()));
     }
 }

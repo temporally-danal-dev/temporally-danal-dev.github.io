@@ -1,18 +1,16 @@
 package com.web.wordle.service;
 
 import com.web.wordle.dto.MatchingResponse;
+import com.web.wordle.dto.MatchingResponse.ResponseResult;
 import com.web.wordle.util.GameUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import javax.annotation.PostConstruct;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @AllArgsConstructor
@@ -40,8 +38,18 @@ public class MatchingService {
         DeferredResult<MatchingResponse> user1Result = pool.remove(user1);
         DeferredResult<MatchingResponse> user2Result = pool.remove(user2);
 
-        user1Result.setResult(new MatchingResponse(player1,player2,uuid));
-        user2Result.setResult(new MatchingResponse(player2,player1,uuid));
+        user1Result.setResult(new MatchingResponse(ResponseResult.SUCCESS,player1,player2,uuid));
+        user2Result.setResult(new MatchingResponse(ResponseResult.SUCCESS, player2,player1,uuid));
 
+    }
+
+    public void cancelMatching(String sessionId) {
+        DeferredResult<MatchingResponse> cancelUser = pool.remove(sessionId);
+        cancelUser.setResult(new MatchingResponse(ResponseResult.CANCEL,"","",""));
+    }
+
+    public void timeOut(String sessionId) {
+        DeferredResult<MatchingResponse> timeOutUser = pool.remove(sessionId);
+        timeOutUser.setResult(new MatchingResponse(ResponseResult.TIMEOUT,"","",""));
     }
 }
