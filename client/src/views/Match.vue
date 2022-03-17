@@ -284,7 +284,7 @@ export default {
       this.onConnected,
       this.onFailed
     );
-
+    window.addEventListener("beforeunload", this.unLoadEvent);
     document.addEventListener("keyup", (e) => {
       if (this.myTurn === true) {
         let pressedKey = String(e.key);
@@ -292,12 +292,10 @@ export default {
           this.deleteLetter();
           return;
         }
-
         if (pressedKey === "Enter") {
           this.submit();
           return;
         }
-
         if (
           pressedKey.length === 1 &&
           pressedKey.charCodeAt(0) > 96 &&
