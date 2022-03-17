@@ -174,7 +174,7 @@ export default {
         guessString += val;
       }
 
-      if (guessString.length !== parseInt(this.answerLength)) {
+      if (guessString.length !== this.answerLength) {
         alert("Not enough letters!");
         return;
       }
@@ -301,8 +301,9 @@ export default {
     });
   },
   beforeRouteLeave(to, from, next) {
-    this.stompClient.disconnect();
-    console.log("disconnected");
+    if (this.stompClient) {
+      this.stompClient.disconnect();
+    }
     next();
   },
 };

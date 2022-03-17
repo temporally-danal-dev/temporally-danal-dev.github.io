@@ -56,39 +56,39 @@ export default {
   data() {
     return {
       answer: "abcde",
-      currentGuess: [],
-      nextLetter: 0,
-      guessCount: 0,
+      cGuess: [],
+      nLetter: 0,
+      gCount: 0,
     };
   },
   methods: {
     insertLetter(pressedKey) {
-      if (this.nextLetter === 5) {
+      if (this.nLetter === 5) {
         return;
       }
       pressedKey = pressedKey.toLowerCase();
 
-      let row = document.getElementsByClassName("letter-row")[this.guessCount];
-      let box = row.children[this.nextLetter];
+      let row = document.getElementsByClassName("letter-row")[this.gCount];
+      let box = row.children[this.nLetter];
       box.textContent = pressedKey;
       box.classList.add("filled-box");
-      this.currentGuess.push(pressedKey);
-      this.nextLetter += 1;
+      this.cGuess.push(pressedKey);
+      this.nLetter += 1;
     },
     deleteLetter() {
-      let row = document.getElementsByClassName("letter-row")[this.guessCount];
-      let box = row.children[this.nextLetter - 1];
+      let row = document.getElementsByClassName("letter-row")[this.gCount];
+      let box = row.children[this.nLetter - 1];
       box.textContent = "";
       box.classList.remove("filled-box");
-      this.currentGuess.pop();
-      this.nextLetter -= 1;
+      this.cGuess.pop();
+      this.nLetter -= 1;
     },
     checkGuess() {
-      let row = document.getElementsByClassName("letter-row")[this.guessCount];
+      let row = document.getElementsByClassName("letter-row")[this.gCount];
       let guessString = "";
       let rightGuess = Array.from(this.answer);
 
-      for (const val of this.currentGuess) {
+      for (const val of this.cGuess) {
         guessString += val;
       }
 
@@ -102,9 +102,9 @@ export default {
       for (let i = 0; i < 5; i++) {
         let letterColor = "";
         let box = row.children[i];
-        let letter = this.currentGuess[i];
+        let letter = this.cGuess[i];
 
-        let letterPosition = rightGuess.indexOf(this.currentGuess[i]);
+        let letterPosition = rightGuess.indexOf(this.cGuess[i]);
         // is letter in the correct guess
         if (letterPosition === -1) {
           letterColor = "grey";
@@ -112,7 +112,7 @@ export default {
           // now, letter is definitely in word
           // if letter index and right guess index are the same
           // letter is in the right position
-          if (this.currentGuess[i] === rightGuess[i]) {
+          if (this.cGuess[i] === rightGuess[i]) {
             // shade green
             letterColor = "green";
           } else {
@@ -131,12 +131,12 @@ export default {
 
       if (guessString === this.answer) {
         alert("You guessed right! Game over!");
-        this.guessCount = 0;
+        this.gCount = 0;
         return;
       } else {
-        this.guessCount += 1;
-        this.currentGuess = [];
-        this.nextLetter = 0;
+        this.gCount += 1;
+        this.cGuess = [];
+        this.nLetter = 0;
       }
     },
     shadeKeyBoard(letter, color) {
@@ -158,7 +158,7 @@ export default {
     },
     onClick(e) {
       let pressedKey = String(e.target.textContent);
-      if (pressedKey === "Del" && this.nextLetter !== 0) {
+      if (pressedKey === "Del" && this.nLetter !== 0) {
         this.deleteLetter();
         return;
       }
@@ -168,11 +168,14 @@ export default {
         return;
       }
 
-      let found = pressedKey.match(/[a-z]/gi);
-      if (!found || found.length > 1) {
-        return;
-      } else {
+      if (
+        pressedKey.length === 1 &&
+        pressedKey.charCodeAt(0) > 96 &&
+        pressedKey.charCodeAt(0) < 123
+      ) {
         this.insertLetter(pressedKey);
+      } else {
+        return;
       }
     },
     insertInput() {
@@ -193,7 +196,7 @@ export default {
     this.insertInput();
     document.addEventListener("keyup", (e) => {
       let pressedKey = String(e.key);
-      if (pressedKey === "Backspace" && this.nextLetter !== 0) {
+      if (pressedKey === "Backspace" && this.nLetter !== 0) {
         this.deleteLetter();
         return;
       }
