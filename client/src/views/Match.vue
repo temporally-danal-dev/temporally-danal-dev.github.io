@@ -43,10 +43,14 @@
         <button class="keyboard-button" @click="onClick">Enter</button>
       </div>
     </div>
-    <div v-if="myTurn === true">
+    <div
+      v-if="myTurn === true"
+      class="turn-box"
+      style="background-color: green"
+    >
       <strong> Your Turn </strong>
     </div>
-    <div v-else>
+    <div v-else class="turn-box" style="background-color: grey">
       <strong> Opponent Turn </strong>
     </div>
   </div>
@@ -334,6 +338,20 @@ export default {
   font-weight: 700;
   height: 3rem;
   width: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+.turn-box {
+  border: 2px solid gray;
+  border-radius: 3px;
+  margin: 2px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  height: auto;
+  width: auto;
   display: flex;
   justify-content: center;
   align-items: center;
