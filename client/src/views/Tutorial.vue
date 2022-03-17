@@ -84,7 +84,6 @@ export default {
       this.nextLetter -= 1;
     },
     checkGuess() {
-      this.insertInput();
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
       let guessString = "";
       let rightGuess = Array.from(this.answer);
@@ -97,6 +96,8 @@ export default {
         alert("Not enough letters!");
         return;
       }
+
+      this.insertInput();
 
       for (let i = 0; i < 5; i++) {
         let letterColor = "";
@@ -202,11 +203,14 @@ export default {
         return;
       }
 
-      let found = /[a-z]/.test(pressedKey);
-      if (!found) {
-        return;
-      } else {
+      if (
+        pressedKey.length === 1 &&
+        pressedKey.charCodeAt(0) > 96 &&
+        pressedKey.charCodeAt(0) < 123
+      ) {
         this.insertLetter(pressedKey);
+      } else {
+        return;
       }
     });
   },

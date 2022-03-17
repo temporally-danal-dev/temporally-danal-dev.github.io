@@ -238,11 +238,14 @@ export default {
           return;
         }
 
-        let found = /[a-z]/.test(pressedKey);
-        if (!found) {
-          return;
-        } else {
+        if (
+          pressedKey.length === 1 &&
+          pressedKey.charCodeAt(0) > 96 &&
+          pressedKey.charCodeAt(0) < 123
+        ) {
           this.insertLetter(pressedKey);
+        } else {
+          return;
         }
       }
     },
@@ -285,11 +288,14 @@ export default {
           return;
         }
 
-        let found = /[a-z]/.test(pressedKey);
-        if (!found) {
-          return;
-        } else {
+        if (
+          pressedKey.length === 1 &&
+          pressedKey.charCodeAt(0) > 96 &&
+          pressedKey.charCodeAt(0) < 123
+        ) {
           this.insertLetter(pressedKey);
+        } else {
+          return;
         }
       }
     });
