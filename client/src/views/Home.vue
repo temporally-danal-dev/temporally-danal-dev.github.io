@@ -89,13 +89,13 @@ export default {
         }, delay);
       }
     },
-    unLoadEvnet(event) {
+    unLoadEvent(event) {
       event.preventDefault();
       event.returnValue = "";
-      if (this.matched) {
+      //if (this.matched) {
         axios({
-          method: "DELETE",
-          url: `http://localhost:8080/matching/${this.key}`,
+          method: "GET",
+          url: `http://localhost:8080/delete/${this.key}`,
         })
           .then((response) => {
             console.log(response);
@@ -103,7 +103,7 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-      }
+      //}
     },
   },
   beforeMount() {

@@ -10,33 +10,26 @@ import javax.servlet.http.HttpSession;
 
 public class ServletUtil {
     public static HttpServletRequest getHttpServletRequest() {
-
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-
         if (ra == null) {
             return null;
         }
-
         return ((ServletRequestAttributes) ra).getRequest();
     }
 
     public static String getParameter(String param) {
         HttpServletRequest req = getHttpServletRequest();
-
         if (req != null) {
             return req.getParameter(param);
         }
-
         return null;
     }
 
     public static String getHeader(String name) {
         HttpServletRequest req = getHttpServletRequest();
-
         if (req != null) {
             return req.getHeader(name);
         }
-
         return null;
     }
 

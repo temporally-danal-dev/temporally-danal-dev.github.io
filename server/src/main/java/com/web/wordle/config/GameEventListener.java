@@ -38,10 +38,6 @@ public class GameEventListener {
         String sessionId = (String) generic.getHeaders().get("simpSessionId");
         log.info("[Connected] room id : {} | websocket session id : {}", matchingRoomId, sessionId);
 
-        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        System.out.println("## headerAccessor :: " + headerAccessor);
-
-
         gameService.connectUser(matchingRoomId, sessionId);//여기서 게임 종류 인원에 맞는 작업을 가져와야함
     }
 
@@ -52,7 +48,6 @@ public class GameEventListener {
         String sessionId = headerAccessor.getSessionId();
 
         log.info("[Disconnected] websocket session id : {}", sessionId);
-        System.out.println("여기도 실행?");
         gameService.disconnectUser(sessionId);
     }
 }

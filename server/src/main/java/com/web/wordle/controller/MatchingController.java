@@ -5,31 +5,35 @@ import com.web.wordle.service.MatchingService;
 import com.web.wordle.util.ServletUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 @RestController
 @CrossOrigin("*")
 @AllArgsConstructor
-@RequestMapping("/matching")
 @Slf4j
 public class MatchingController {
 
     private MatchingService matchingService;
 
-    @GetMapping
-    @ResponseBody
-    public DeferredResult<MatchingResponse> join(){
-        log.info("matching");
-        String sessionId = ServletUtil.getSession().getId();
+    @GetMapping("/matching/{userId}")
+    public DeferredResult<MatchingResponse> join(@PathVariable String userId){
+        log.info("JOINING MATCHING userID : {}" , userId);
         final DeferredResult<MatchingResponse> deferredResult = new DeferredResult<>(null);
-        matchingService.join(sessionId,deferredResult);
+        matchingService.join(userId,deferredResult);
 
-        deferredResult.onCompletion(() -> matchingService.cancelMatching(sessionId));
-        deferredResult.onError((throwable) -> matchingService.cancelMatching(sessionId));
-        deferredResult.onTimeout(() -> matchingService.timeOut(sessionId));
+        deferredResult.onCompletion(() -> matchingService.cancelMatching(userId));
+        deferredResult.onError((throwable) -> matchingService.cancelMatching(userId));
+        deferredResult.onTimeout(() -> matchingService.timeOut(userId));
 
         return deferredResult;
+    }
+
+    @GetMapping("/delete/{userId}")
+    public void cancel(@PathVariable String userId){
+        log.info("DELETE MATCHING userID : {}" , userId);
+        matchingService.cancelMatching(userId);
     }
 
 }
