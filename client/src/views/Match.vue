@@ -52,7 +52,7 @@ import SockJs from "sockjs-client";
 
 // @ is an alias to /src
 export default {
-  name: "Game",
+  name: "Match",
   data() {
     return {
       answerLength: null,

@@ -1,14 +1,14 @@
 <template>
   <div id="game-board">
-    <div class="letter-row">
-      <div class="letter-box" style="background-color: grey">T</div>
-      <div class="letter-box" style="background-color: green">U</div>
-      <div class="letter-box" style="background-color: grey">T</div>
-      <div class="letter-box" style="background-color: green">O</div>
-      <div class="letter-box" style="background-color: grey">R</div>
-      <div class="letter-box" style="background-color: yellow">I</div>
-      <div class="letter-box" style="background-color: yellow">A</div>
-      <div class="letter-box" style="background-color: grey">L</div>
+    <div class="title-row">
+      <div class="title-box" style="background-color: grey">T</div>
+      <div class="title-box" style="background-color: green">U</div>
+      <div class="title-box" style="background-color: grey">T</div>
+      <div class="title-box" style="background-color: green">O</div>
+      <div class="title-box" style="background-color: grey">R</div>
+      <div class="title-box" style="background-color: yellow">I</div>
+      <div class="title-box" style="background-color: yellow">A</div>
+      <div class="title-box" style="background-color: grey">L</div>
     </div>
     <div id="keyboard-cont">
       <div class="first-row">
@@ -243,6 +243,24 @@ h1 {
 
 .letter-row {
   display: flex;
+}
+
+.title-row {
+  display: flex;
+}
+
+.title-box {
+  border: 2px solid gray;
+  border-radius: 3px;
+  margin: 2px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  height: 3rem;
+  width: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
 }
 
 #keyboard-cont {
