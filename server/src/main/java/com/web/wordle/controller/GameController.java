@@ -3,13 +3,14 @@ package com.web.wordle.controller;
 import com.web.wordle.dto.*;
 import com.web.wordle.service.GameService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
+
 
 @Controller
 @CrossOrigin("*")
@@ -21,26 +22,21 @@ public class GameController {
 
     private GameService gameService;
 
-    //세션에 담겨야할 것
-    //플레이어, 정답,
-
     //join -> matching
     @MessageMapping("/{roomId}/join")
     public void join(@DestinationVariable String roomId, JoinRequest req){
         log.info("JOIN");
-
         GameSession gameSession = gameService.join(roomId,req);
         if(gameSession.getPlayerList().size()==2){
             StartResponse startResponse = gameService.start(roomId);
             template.convertAndSend("/sub/" + roomId+"/start", startResponse);;
         }
     }
-
     //submit  answer, nickname, turn(optional) => nickname, answer , ball count , turn(optional),next(optional)
     @MessageMapping("/{roomId}/submit")
     public void submit(@DestinationVariable String roomId, SubmitRequest submitRequest){
 
-        if(gameService.validationCheck(roomId,submitRequest.getNickname())){
+        if(gameService.validationTurnCheck(roomId,submitRequest.getNickname())){
             log.info("ERROR");
             template.convertAndSend("/sub/" + roomId+"/submit", "error");
             return;

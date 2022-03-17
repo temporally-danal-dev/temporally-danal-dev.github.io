@@ -24,6 +24,11 @@ public class MatchingController {
         String sessionId = ServletUtil.getSession().getId();
         final DeferredResult<MatchingResponse> deferredResult = new DeferredResult<>(null);
         matchingService.join(sessionId,deferredResult);
+
+        deferredResult.onCompletion(() -> matchingService.cancelMatching(sessionId));
+        deferredResult.onError((throwable) -> matchingService.cancelMatching(sessionId));
+        deferredResult.onTimeout(() -> matchingService.timeOut(sessionId));
+
         return deferredResult;
     }
 

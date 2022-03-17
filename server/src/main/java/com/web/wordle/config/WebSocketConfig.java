@@ -19,7 +19,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry config){
         config.setApplicationDestinationPrefixes("/pub");
         config.enableSimpleBroker("/sub");
+        //config.setUserDestinationPrefix("/user");
     }
-
+//    @Override
+//    public void configureClientInboundChannel(ChannelRegistration registration) {
+//        registration.interceptors(new GameInterceptor());
+//    }
 
 }
