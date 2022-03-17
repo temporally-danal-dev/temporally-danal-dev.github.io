@@ -70,11 +70,7 @@ export default {
     onStart(res) {
       const body = JSON.parse(res.body);
       this.answerLength = body.answerLength;
-      const who = this.nickname === body.nickname ? "you" : "opponent";
-      this.insertBox(who);
-      console.log(body.nickname);
-      console.log(this.me);
-      console.log(body.nickname === this.me);
+      this.insertBox();
       if (body.nickname === this.me) {
         this.myTurn = true;
       } else {
@@ -83,9 +79,8 @@ export default {
     },
     onSubmit(res) {
       const body = JSON.parse(res.body);
-      const who = this.nickname === body.nickname ? "you" : "opponent";
-      this.insertBox(who);
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
+      this.insertBox();
       for (let i = 0; i < this.answerLength; i++) {
         let letterColor = "";
         let box = row.children[i];
@@ -140,7 +135,11 @@ export default {
           let delay = 250 * i;
           setTimeout(() => {
             //shade box
-            alert(`The answer was ${body.word}, winner is ${body.nickname}`);
+            alert(
+              `The answer was ${body.word}, winner is ${
+                body.nickname === this.me ? "You" : "Opponent"
+              }`
+            );
           }, delay);
         }
       }
@@ -174,9 +173,7 @@ export default {
       for (const val of this.currentGuess) {
         guessString += val;
       }
-      console.log(guessString);
-      console.log(guessString.length);
-      console.log(this.answerLength);
+
       if (guessString.length !== parseInt(this.answerLength)) {
         alert("Not enough letters!");
         return;
@@ -249,7 +246,7 @@ export default {
         }
       }
     },
-    insertBox(who) {
+    insertBox() {
       let board = document.getElementById("game-board");
       let row = document.createElement("div");
       row.className = "letter-row";
@@ -260,15 +257,6 @@ export default {
         row.appendChild(box);
       }
 
-      if (who === "you") {
-        const label = document.createElement("span");
-        label.textContent = "you :";
-        row.insertBefore(label, row.firstChild);
-      } else {
-        const label = document.createElement("span");
-        label.textContent = ": opponent";
-        row.appendChild(label);
-      }
       board.appendChild(row);
     },
   },
@@ -276,7 +264,7 @@ export default {
     this.roomId = sessionStorage.getItem("roomId");
     this.me = sessionStorage.getItem("me");
     this.opponent = sessionStorage.getItem("opponent");
-    const socket = new SockJs("http://localhost:8080/socket");
+    const socket = new SockJs("http://10.10.1.84:8080/socket");
     this.stompClient = stomp.over(socket);
     this.stompClient.connect(
       { roomId: this.roomId, nickname: this.me },
@@ -306,9 +294,10 @@ export default {
       }
     });
   },
-  beforeRouteLeave() {
+  beforeRouteLeave(to, from, next) {
     this.stompClient.disconnect();
     console.log("disconnected");
+    next();
   },
 };
 </script>
