@@ -35,6 +35,11 @@ import axios from "axios";
 
 export default {
   name: "Home",
+  data() {
+    return {
+      key: "",
+    };
+  },
   methods: {
     insertWaiting() {
       const waiting = document.querySelector("h2");
@@ -53,7 +58,7 @@ export default {
       this.insertWaiting();
       axios({
         method: "GET",
-        url: "http://localhost:8080/matching",
+        url: `http://localhost:8080/matching/${this.key}`,
       })
         .then((response) => {
           if (response.data.responseResult === "TIMEOUT") {
@@ -79,6 +84,9 @@ export default {
         }, delay);
       }
     },
+  },
+  beforeMount() {
+    this.key = Math.floor(Math.random() * (999999 - 100000)) + 100000;
   },
 };
 </script>
