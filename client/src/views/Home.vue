@@ -49,13 +49,19 @@ export default {
       this.insertWaiting();
       axios({
         method: "GET",
-        url: "http://10.10.1.84:8080/matching",
+        url: "http://localhost:8080/matching",
       })
         .then((response) => {
-          sessionStorage.setItem("me", response.data.me);
-          sessionStorage.setItem("roomId", response.data.roomId);
-          sessionStorage.setItem("opponent", response.data.opponent);
-          this.$router.push({ name: "Match" });
+          if (response.data.responseResult === "TIMEOUT") {
+            console.log("timed out");
+          } else if (response.data.responseResult === "CANCEL") {
+            console.log("canceled");
+          } else {
+            sessionStorage.setItem("me", response.data.me);
+            sessionStorage.setItem("roomId", response.data.roomId);
+            sessionStorage.setItem("opponent", response.data.opponent);
+            this.$router.push({ name: "Match" });
+          }
         })
         .catch((error) => {
           console.log(error);
