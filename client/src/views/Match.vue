@@ -43,6 +43,12 @@
         <button class="keyboard-button" @click="onClick">Enter</button>
       </div>
     </div>
+    <div v-if="myTurn === true">
+      <strong> Your Turn </strong>
+    </div>
+    <div v-else>
+      <strong> Opponent Turn </strong>
+    </div>
   </div>
 </template>
 
