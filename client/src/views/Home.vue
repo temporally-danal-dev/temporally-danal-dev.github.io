@@ -61,6 +61,13 @@ export default {
           console.log(error);
           alert("can not make it");
         });
+      for (let i = 0; i < 60; i++) {
+        let delay = 500 * i;
+        const waiting = document.querySelector("h2");
+        setTimeout(() => {
+          waiting.textContent = "matching progressing" + ".".repeat(i % 4);
+        }, delay);
+      }
     },
   },
 };
