@@ -64,12 +64,13 @@ export default {
       })
         .then((response) => {
           if (response.data.responseResult === "TIMEOUT") {
-            console.log("timed out");
+            alert("timed out");
+            const waiting = document.querySelector("h2");
+            document.querySelector("#home").removeChild(waiting);
           } else if (response.data.responseResult === "CANCEL") {
-            console.log("canceled");
             alert("canceled");
             const waiting = document.querySelector("h2");
-            document.querySelector("#home").remove(waiting);
+            document.querySelector("#home").removeChild(waiting);
           } else {
             sessionStorage.setItem("me", response.data.me);
             sessionStorage.setItem("roomId", response.data.roomId);
@@ -80,6 +81,8 @@ export default {
         .catch((error) => {
           console.log(error);
           alert("can not make it");
+          const waiting = document.querySelector("h2");
+          document.querySelector("#home").removeChild(waiting);
         });
       for (let i = 0; i < 60; i++) {
         let delay = 500 * i;
@@ -92,7 +95,7 @@ export default {
     unLoadEvent(event) {
       event.preventDefault();
       event.returnValue = "";
-      //if (this.matched) {
+      if (this.matched) {
         axios({
           method: "GET",
           url: `http://localhost:8080/delete/${this.key}`,
@@ -103,7 +106,7 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-      //}
+      }
     },
   },
   beforeMount() {

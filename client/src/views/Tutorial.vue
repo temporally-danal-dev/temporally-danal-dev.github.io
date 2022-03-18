@@ -10,7 +10,7 @@
       <div class="title-box" style="background-color: yellow">A</div>
       <div class="title-box" style="background-color: grey">L</div>
     </div>
-    <div id="keyboard-cont">
+    <div id="keyboard-cont" style="margin-top: 30px">
       <div class="first-row">
         <button class="keyboard-button" @click="onClick">q</button>
         <button class="keyboard-button" @click="onClick">w</button>

@@ -81,5 +81,8 @@ export default {
 .closeBtn {
   position: fixed;
   display: inline;
+  border: 0;
+  outline: 0;
+  background-color: white;
 }
 </style>
