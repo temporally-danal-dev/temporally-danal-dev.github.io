@@ -63,13 +63,12 @@ export default {
         url: `http://localhost:8080/matching/${this.key}`,
       })
         .then((response) => {
+          const waiting = document.querySelector("h2");
           if (response.data.responseResult === "TIMEOUT") {
             alert("timed out");
-            const waiting = document.querySelector("h2");
             document.querySelector("#home").removeChild(waiting);
           } else if (response.data.responseResult === "CANCEL") {
             alert("canceled");
-            const waiting = document.querySelector("h2");
             document.querySelector("#home").removeChild(waiting);
           } else {
             sessionStorage.setItem("me", response.data.me);
