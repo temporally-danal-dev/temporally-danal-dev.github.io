@@ -77,13 +77,15 @@ public class GameService {
         return new SubmitResponse(input, output, gameList.get(roomId).changeTurn());
     }
 
-    //validation check 지금 submit 한 애가 제대로 된 턴인지 체크
-    public boolean validationTurnCheck(String roomId,String nickname){
-        return !gameList.get(roomId).getTurn().equals(nickname);
-    }
-
-    public boolean validationLengthCheck(String roomId,String word){
-        return !(gameList.get(roomId).getAnswer().length() == word.length());
+    public ErrorResponse validationCheck(String roomId, SubmitRequest submitRequest){
+        if(GameUtil.validationTurnCheck(gameList.get(roomId),submitRequest.getNickname())){
+            return new ErrorResponse(ErrorResponse.ErrorType.TURN,"플레이어의 턴이 아닙니다.");
+        } else if (GameUtil.validationLengthCheck(gameList.get(roomId),submitRequest.getWord())){
+            return new ErrorResponse(ErrorResponse.ErrorType.LENGTH,"입력값의 길이가 올바르지 않습니다.");
+        } else if(GameUtil.validationValueCheck(submitRequest.getWord())){
+            return new ErrorResponse(ErrorResponse.ErrorType.VALUE,"영어 소문자만 입력해주세요.");
+        }
+        return null;
     }
 
     //게임이 끝났는지 체크

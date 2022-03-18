@@ -36,9 +36,10 @@ public class GameController {
     @MessageMapping("/{roomId}/submit")
     public void submit(@DestinationVariable String roomId, SubmitRequest submitRequest){
 
-        if(gameService.validationTurnCheck(roomId,submitRequest.getNickname())){
-            log.info("ERROR");
-            template.convertAndSend("/sub/" + roomId+"/submit", "error");
+        ErrorResponse errorResponse = gameService.validationCheck(roomId,submitRequest);
+
+        if(errorResponse != null){
+            template.convertAndSend("/sub/" + submitRequest.getNickname()+"/error", errorResponse);
             return;
         }
 
