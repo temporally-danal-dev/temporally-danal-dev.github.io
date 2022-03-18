@@ -80,17 +80,19 @@ export default {
     onStart(res) {
       const body = JSON.parse(res.body);
       this.answerLength = body.answerLength;
-      this.insertBox();
       if (body.nickname === this.me) {
         this.myTurn = true;
       } else {
         this.myTurn = false;
       }
+      const who = this.me !== body.nickname ? "opponent's" : "your";
+      this.insertBox(who);
     },
     onSubmit(res) {
       const body = JSON.parse(res.body);
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
-      this.insertBox();
+      const who = this.me === body.nickname ? "your" : "opponent's";
+      this.insertBox(who);
       for (let i = 0; i < this.answerLength; i++) {
         let letterColor = "";
         let box = row.children[i];
@@ -146,7 +148,7 @@ export default {
           setTimeout(() => {
             //shade box
             alert(
-              `The answer was ${body.word}, winner is ${
+              `The answer was ${body.word.toUpperCase()}, winner is ${
                 body.nickname === this.me ? "You" : "Opponent"
               }`
             );
@@ -259,8 +261,10 @@ export default {
         }
       }
     },
-    insertBox() {
+    insertBox(who) {
       let board = document.getElementById("game-board");
+      let nameRow = document.createElement("div");
+      nameRow.textContent = `${who} answer`;
       let row = document.createElement("div");
       row.className = "letter-row";
 
@@ -269,7 +273,7 @@ export default {
         box.className = "letter-box";
         row.appendChild(box);
       }
-
+      board.appendChild(nameRow);
       board.appendChild(row);
     },
   },
