@@ -10,7 +10,7 @@
       <div class="title-box" style="background-color: yellow">A</div>
       <div class="title-box" style="background-color: grey">L</div>
     </div>
-    <div id="game-board">
+    <div id="game-board" style="overflow: auto">
       <h2>ANSWERS</h2>
     </div>
     <div id="keyboard-cont" style="margin-top: 30px">
@@ -71,9 +71,8 @@ export default {
       }
       pressedKey = pressedKey.toLowerCase();
 
-      let row = document.getElementsByClassName("letter-row");
+      let row = document.getElementsByClassName("letter-row")[this.gCount];
       if (row) {
-        row = row[this.gCount];
         let box = row.children[this.nLetter];
         box.textContent = pressedKey;
         box.classList.add("filled-box");
@@ -100,6 +99,7 @@ export default {
 
       if (guessString.length !== 5) {
         alert("Not enough letters!");
+        console.log(this.cGuess);
         console.log(guessString);
         return;
       }
@@ -229,12 +229,6 @@ export default {
 <style>
 h1 {
   text-align: center;
-}
-
-#game-board {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
 }
 
 .letter-box {

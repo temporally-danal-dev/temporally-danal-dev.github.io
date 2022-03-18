@@ -221,9 +221,8 @@ export default {
       }
       pressedKey = pressedKey.toLowerCase();
 
-      let row = document.getElementsByClassName("letter-row");
+      let row = document.getElementsByClassName("letter-row")[this.gCount];
       if (row) {
-        row = row[this.guessCount];
         let box = row.children[this.nextLetter];
         box.textContent = pressedKey;
         box.classList.add("filled-box");
@@ -232,9 +231,8 @@ export default {
       }
     },
     deleteLetter() {
-      let row = document.getElementsByClassName("letter-row");
+      let row = document.getElementsByClassName("letter-row")[this.gCount];
       if (row) {
-        row = row[this.guessCount];
         let box = row.children[this.nextLetter - 1];
         box.textContent = "";
         box.classList.remove("filled-box");
@@ -387,7 +385,7 @@ export default {
   align-items: center;
   flex-direction: column;
   border: solid;
-  height: 80%;
+  height: 600px;
   margin-top: 20px;
 }
 </style>
