@@ -80,6 +80,17 @@ export default {
     };
   },
   methods: {
+    onError(res) {
+      const body = JSON.parse(res.body);
+      alert(body.ErrorMsg);
+      if (body.ErrorType === "TURN") {
+        this.myTurn = false;
+      } else {
+        while (this.currentGuess.length > 0) {
+          this.deleteLetter();
+        }
+      }
+    },
     onStart(res) {
       const body = JSON.parse(res.body);
       this.answerLength = body.answerLength;
@@ -169,6 +180,7 @@ export default {
       this.stompClient.subscribe(`/sub/${this.roomId}/start`, this.onStart);
       this.stompClient.subscribe(`/sub/${this.roomId}/submit`, this.onSubmit);
       this.stompClient.subscribe(`/sub/${this.roomId}/end`, this.onEnd);
+      this.stompClient.subscribe(`/sub/${this.me}/error`, this.onError);
       const msg = {
         nickname: this.me,
       };
@@ -220,12 +232,15 @@ export default {
       }
     },
     deleteLetter() {
-      let row = document.getElementsByClassName("letter-row")[this.guessCount];
-      let box = row.children[this.nextLetter - 1];
-      box.textContent = "";
-      box.classList.remove("filled-box");
-      this.currentGuess.pop();
-      this.nextLetter -= 1;
+      let row = document.getElementsByClassName("letter-row");
+      if (row) {
+        row = row[this.guessCount];
+        let box = row.children[this.nextLetter - 1];
+        box.textContent = "";
+        box.classList.remove("filled-box");
+        this.currentGuess.pop();
+        this.nextLetter -= 1;
+      }
     },
     shadeKeyBoard(letter, color) {
       for (const elem of document.getElementsByClassName("keyboard-button")) {
