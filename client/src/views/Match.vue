@@ -1,11 +1,24 @@
 <template>
-  <div id="game-board">
+  <div>
     <div class="title-row">
       <div class="title-box" style="background-color: yellow">M</div>
       <div class="title-box" style="background-color: yellow">A</div>
       <div class="title-box" style="background-color: green">T</div>
       <div class="title-box" style="background-color: green">C</div>
       <div class="title-box" style="background-color: yellow">H</div>
+    </div>
+    <div id="game-board">
+      <h2>ANSWERS</h2>
+    </div>
+    <div
+      v-if="myTurn === true"
+      class="turn-box"
+      style="background-color: green"
+    >
+      <strong> Your Turn </strong>
+    </div>
+    <div v-else class="turn-box" style="background-color: grey">
+      <strong> Opponent Turn </strong>
     </div>
     <div id="keyboard-cont">
       <div class="first-row">
@@ -42,16 +55,6 @@
         <button class="keyboard-button" @click="onClick">m</button>
         <button class="keyboard-button" @click="onClick">Enter</button>
       </div>
-    </div>
-    <div
-      v-if="myTurn === true"
-      class="turn-box"
-      style="background-color: green"
-    >
-      <strong> Your Turn </strong>
-    </div>
-    <div v-else class="turn-box" style="background-color: grey">
-      <strong> Opponent Turn </strong>
     </div>
   </div>
 </template>
@@ -187,6 +190,7 @@ export default {
       }
 
       if (guessString.length !== this.answerLength) {
+        console.log(guessString);
         alert("Not enough letters!");
         return;
       }
@@ -205,12 +209,15 @@ export default {
       }
       pressedKey = pressedKey.toLowerCase();
 
-      let row = document.getElementsByClassName("letter-row")[this.guessCount];
-      let box = row.children[this.nextLetter];
-      box.textContent = pressedKey;
-      box.classList.add("filled-box");
-      this.currentGuess.push(pressedKey);
-      this.nextLetter += 1;
+      let row = document.getElementsByClassName("letter-row");
+      if (row) {
+        row = row[this.guessCount];
+        let box = row.children[this.nextLetter];
+        box.textContent = pressedKey;
+        box.classList.add("filled-box");
+        this.currentGuess.push(pressedKey);
+        this.nextLetter += 1;
+      }
     },
     deleteLetter() {
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
@@ -358,5 +365,14 @@ export default {
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
+}
+
+#game-board {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border: solid;
+  height: 80%;
+  margin-top: 20px;
 }
 </style>

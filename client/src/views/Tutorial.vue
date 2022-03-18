@@ -1,5 +1,5 @@
 <template>
-  <div id="game-board">
+  <div>
     <div class="title-row">
       <div class="title-box" style="background-color: grey">T</div>
       <div class="title-box" style="background-color: green">U</div>
@@ -9,6 +9,9 @@
       <div class="title-box" style="background-color: yellow">I</div>
       <div class="title-box" style="background-color: yellow">A</div>
       <div class="title-box" style="background-color: grey">L</div>
+    </div>
+    <div id="game-board">
+      <h2>ANSWERS</h2>
     </div>
     <div id="keyboard-cont" style="margin-top: 30px">
       <div class="first-row">
@@ -68,12 +71,15 @@ export default {
       }
       pressedKey = pressedKey.toLowerCase();
 
-      let row = document.getElementsByClassName("letter-row")[this.gCount];
-      let box = row.children[this.nLetter];
-      box.textContent = pressedKey;
-      box.classList.add("filled-box");
-      this.cGuess.push(pressedKey);
-      this.nLetter += 1;
+      let row = document.getElementsByClassName("letter-row");
+      if (row) {
+        row = row[this.gCount];
+        let box = row.children[this.nLetter];
+        box.textContent = pressedKey;
+        box.classList.add("filled-box");
+        this.cGuess.push(pressedKey);
+        this.nLetter += 1;
+      }
     },
     deleteLetter() {
       let row = document.getElementsByClassName("letter-row")[this.gCount];
@@ -92,8 +98,9 @@ export default {
         guessString += val;
       }
 
-      if (guessString.length != 5) {
+      if (guessString.length !== 5) {
         alert("Not enough letters!");
+        console.log(guessString);
         return;
       }
 
@@ -254,6 +261,7 @@ h1 {
 
 .title-row {
   display: flex;
+  justify-content: center;
 }
 
 .title-box {
