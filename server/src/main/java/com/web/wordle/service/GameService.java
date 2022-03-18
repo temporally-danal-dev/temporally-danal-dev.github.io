@@ -1,6 +1,8 @@
 package com.web.wordle.service;
 
+import com.web.wordle.dao.GameDao;
 import com.web.wordle.dto.*;
+import com.web.wordle.entity.Word;
 import com.web.wordle.util.GameUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +10,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,6 +25,8 @@ public class GameService {
     private final SimpMessagingTemplate template;
 
     private Map<String, String> connectedUsers;
+
+    private final GameDao gameDao;
 
     @PostConstruct
     private void setUp(){
@@ -36,7 +43,10 @@ public class GameService {
             gameSession = new GameSession();
             gameSession.getPlayerList().add(req.getNickname());
 
-            gameSession.setAnswer(GameUtil.generateAnswer());
+            List<Word> wordList = gameDao.findAll();
+            Collections.shuffle(wordList);
+            System.out.println(wordList.get(0).getWord());
+            gameSession.setAnswer(wordList.get(0).getWord());
         }
 
         gameList.put(roomId,gameSession);
