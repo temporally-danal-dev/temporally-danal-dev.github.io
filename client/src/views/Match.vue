@@ -147,6 +147,9 @@ export default {
       const body = JSON.parse(res.body);
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
       const who = this.me === body.nickname ? "your" : "opponent's";
+      if (who === "your") {
+        this.hint = false;
+      }
       this.insertBox(who, "hint");
       for (let i = 0; i < this.answerLength; i++) {
         let letterColor = "";
