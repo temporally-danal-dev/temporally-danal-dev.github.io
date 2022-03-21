@@ -21,39 +21,40 @@
       <strong> Opponent Turn </strong>
     </div>
     <div id="keyboard-cont">
+      <div class="hint-row" v-show="myTurn && hint"></div>
       <div class="first-row">
-        <button class="keyboard-button" @click="onClick">q</button>
-        <button class="keyboard-button" @click="onClick">w</button>
-        <button class="keyboard-button" @click="onClick">e</button>
-        <button class="keyboard-button" @click="onClick">r</button>
-        <button class="keyboard-button" @click="onClick">t</button>
-        <button class="keyboard-button" @click="onClick">y</button>
-        <button class="keyboard-button" @click="onClick">u</button>
-        <button class="keyboard-button" @click="onClick">i</button>
-        <button class="keyboard-button" @click="onClick">o</button>
-        <button class="keyboard-button" @click="onClick">p</button>
+        <button class="keyboard-button" @click="onKeyboardClick">q</button>
+        <button class="keyboard-button" @click="onKeyboardClick">w</button>
+        <button class="keyboard-button" @click="onKeyboardClick">e</button>
+        <button class="keyboard-button" @click="onKeyboardClick">r</button>
+        <button class="keyboard-button" @click="onKeyboardClick">t</button>
+        <button class="keyboard-button" @click="onKeyboardClick">y</button>
+        <button class="keyboard-button" @click="onKeyboardClick">u</button>
+        <button class="keyboard-button" @click="onKeyboardClick">i</button>
+        <button class="keyboard-button" @click="onKeyboardClick">o</button>
+        <button class="keyboard-button" @click="onKeyboardClick">p</button>
       </div>
       <div class="second-row">
-        <button class="keyboard-button" @click="onClick">a</button>
-        <button class="keyboard-button" @click="onClick">s</button>
-        <button class="keyboard-button" @click="onClick">d</button>
-        <button class="keyboard-button" @click="onClick">f</button>
-        <button class="keyboard-button" @click="onClick">g</button>
-        <button class="keyboard-button" @click="onClick">h</button>
-        <button class="keyboard-button" @click="onClick">j</button>
-        <button class="keyboard-button" @click="onClick">k</button>
-        <button class="keyboard-button" @click="onClick">l</button>
+        <button class="keyboard-button" @click="onKeyboardClick">a</button>
+        <button class="keyboard-button" @click="onKeyboardClick">s</button>
+        <button class="keyboard-button" @click="onKeyboardClick">d</button>
+        <button class="keyboard-button" @click="onKeyboardClick">f</button>
+        <button class="keyboard-button" @click="onKeyboardClick">g</button>
+        <button class="keyboard-button" @click="onKeyboardClick">h</button>
+        <button class="keyboard-button" @click="onKeyboardClick">j</button>
+        <button class="keyboard-button" @click="onKeyboardClick">k</button>
+        <button class="keyboard-button" @click="onKeyboardClick">l</button>
       </div>
       <div class="third-row">
-        <button class="keyboard-button" @click="onClick">Del</button>
-        <button class="keyboard-button" @click="onClick">z</button>
-        <button class="keyboard-button" @click="onClick">x</button>
-        <button class="keyboard-button" @click="onClick">c</button>
-        <button class="keyboard-button" @click="onClick">v</button>
-        <button class="keyboard-button" @click="onClick">b</button>
-        <button class="keyboard-button" @click="onClick">n</button>
-        <button class="keyboard-button" @click="onClick">m</button>
-        <button class="keyboard-button" @click="onClick">Enter</button>
+        <button class="keyboard-button" @click="onKeyboardClick">Del</button>
+        <button class="keyboard-button" @click="onKeyboardClick">z</button>
+        <button class="keyboard-button" @click="onKeyboardClick">x</button>
+        <button class="keyboard-button" @click="onKeyboardClick">c</button>
+        <button class="keyboard-button" @click="onKeyboardClick">v</button>
+        <button class="keyboard-button" @click="onKeyboardClick">b</button>
+        <button class="keyboard-button" @click="onKeyboardClick">n</button>
+        <button class="keyboard-button" @click="onKeyboardClick">m</button>
+        <button class="keyboard-button" @click="onKeyboardClick">Enter</button>
       </div>
     </div>
   </div>
@@ -77,6 +78,7 @@ export default {
       nextLetter: 0,
       guessCount: 0,
       myTurn: false,
+      hint: true,
     };
   },
   methods: {
@@ -101,6 +103,7 @@ export default {
       }
       const who = this.me !== body.nickname ? "opponent's" : "your";
       this.insertBox(who);
+      this.insertHint();
     },
     onSubmit(res) {
       const body = JSON.parse(res.body);
@@ -140,9 +143,43 @@ export default {
         this.myTurn = false;
       }
     },
+    onHint(res) {
+      const body = JSON.parse(res.body);
+      let row = document.getElementsByClassName("letter-row")[this.guessCount];
+      const who = this.me === body.nickname ? "your" : "opponent's";
+      if (who === "your") {
+        this.hint = false;
+      }
+      this.insertBox(who, "hint");
+      for (let i = 0; i < this.answerLength; i++) {
+        let letterColor = "";
+        let box = row.children[i];
+        let letter = body.word[i];
+
+        // is letter in the correct guess
+        if (body.matchStatus[i] === "0") {
+          letterColor = "grey";
+        } else if (body.matchStatus[i] === "1") {
+          letterColor = "yellow";
+        } else {
+          letterColor = "green";
+        }
+
+        let delay = 250 * i;
+        setTimeout(() => {
+          //shade box
+          box.style.backgroundColor = letterColor;
+          box.textContent = letter;
+          this.shadeKeyBoard(letter, letterColor);
+        }, delay);
+      }
+
+      this.guessCount += 1;
+      this.currentGuess = [];
+      this.nextLetter = 0;
+    },
     onEnd(res) {
       const body = JSON.parse(res.body);
-      this.insertBox();
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
       for (let i = 0; i < this.answerLength + 1; i++) {
         if (i < this.answerLength) {
@@ -181,6 +218,7 @@ export default {
       this.stompClient.subscribe(`/sub/${this.roomId}/submit`, this.onSubmit);
       this.stompClient.subscribe(`/sub/${this.roomId}/end`, this.onEnd);
       this.stompClient.subscribe(`/sub/${this.me}/error`, this.onError);
+      this.stompClient.subscribe(`/sub/${this.roomId}/hint`, this.onHint);
       const msg = {
         nickname: this.me,
       };
@@ -202,7 +240,6 @@ export default {
       }
 
       if (guessString.length !== this.answerLength) {
-        console.log(guessString);
         alert("Not enough letters!");
         return;
       }
@@ -220,8 +257,7 @@ export default {
         return;
       }
       pressedKey = pressedKey.toLowerCase();
-
-      let row = document.getElementsByClassName("letter-row")[this.gCount];
+      let row = document.getElementsByClassName("letter-row")[this.guessCount];
       if (row) {
         let box = row.children[this.nextLetter];
         box.textContent = pressedKey;
@@ -231,7 +267,7 @@ export default {
       }
     },
     deleteLetter() {
-      let row = document.getElementsByClassName("letter-row")[this.gCount];
+      let row = document.getElementsByClassName("letter-row")[this.guessCount];
       if (row) {
         let box = row.children[this.nextLetter - 1];
         box.textContent = "";
@@ -257,7 +293,7 @@ export default {
         }
       }
     },
-    onClick(e) {
+    onKeyboardClick(e) {
       if (this.myTurn === true) {
         let pressedKey = String(e.target.textContent);
         if (pressedKey === "Del" && this.nextLetter !== 0) {
@@ -281,10 +317,26 @@ export default {
         }
       }
     },
-    insertBox(who) {
+    onHintClick(e) {
+      if (this.myTurn === true && this.hint === true) {
+        const location = e.target.id;
+        const msg = {
+          nickname: this.me,
+          location: location,
+        };
+        this.stompClient.send(`/pub/${this.roomId}/hint`, JSON.stringify(msg));
+      } else {
+        alert("you can't use hint");
+      }
+    },
+    insertBox(who, event = "submit") {
       let board = document.getElementById("game-board");
       let nameRow = document.createElement("div");
-      nameRow.textContent = `${who} answer`;
+      if (event === "hint") {
+        nameRow.textContent = `${who} hint`;
+      } else {
+        nameRow.textContent = `${who} answer`;
+      }
       let row = document.createElement("div");
       row.className = "letter-row";
 
@@ -295,6 +347,17 @@ export default {
       }
       board.appendChild(nameRow);
       board.appendChild(row);
+    },
+    insertHint() {
+      const hintRow = document.querySelector(".hint-row");
+      for (let i = 0; i < this.answerLength; i++) {
+        let button = document.createElement("button");
+        button.className = "keyboard-button";
+        button.textContent = "hint";
+        button.id = i;
+        button.addEventListener("click", this.onHintClick);
+        hintRow.appendChild(button);
+      }
     },
   },
   mounted() {
@@ -309,28 +372,28 @@ export default {
       this.onFailed
     );
     window.addEventListener("beforeunload", this.unLoadEvent);
-    document.addEventListener("keyup", (e) => {
-      if (this.myTurn === true) {
-        let pressedKey = String(e.key);
-        if (pressedKey === "Backspace" && this.nextLetter !== 0) {
-          this.deleteLetter();
-          return;
-        }
-        if (pressedKey === "Enter") {
-          this.submit();
-          return;
-        }
-        if (
-          pressedKey.length === 1 &&
-          pressedKey.charCodeAt(0) > 96 &&
-          pressedKey.charCodeAt(0) < 123
-        ) {
-          this.insertLetter(pressedKey);
-        } else {
-          return;
-        }
-      }
-    });
+    // document.addEventListener("keyup", (e) => {
+    //   if (this.myTurn === true) {
+    //     let pressedKey = String(e.key);
+    //     if (pressedKey === "Backspace" && this.nextLetter !== 0) {
+    //       this.deleteLetter();
+    //       return;
+    //     }
+    //     if (pressedKey === "Enter") {
+    //       this.submit();
+    //       return;
+    //     }
+    //     if (
+    //       pressedKey.length === 1 &&
+    //       pressedKey.charCodeAt(0) > 96 &&
+    //       pressedKey.charCodeAt(0) < 123
+    //     ) {
+    //       this.insertLetter(pressedKey);
+    //     } else {
+    //       return;
+    //     }
+    //   }
+    // });
   },
   beforeRouteLeave(to, from, next) {
     if (this.stompClient) {
@@ -387,5 +450,9 @@ export default {
   border: solid;
   height: 600px;
   margin-top: 20px;
+}
+
+.hint-row {
+  margin: 0.5rem 0;
 }
 </style>
