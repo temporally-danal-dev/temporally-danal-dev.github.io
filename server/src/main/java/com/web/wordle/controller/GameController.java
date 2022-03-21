@@ -54,7 +54,7 @@ public class GameController {
     }
 
     @MessageMapping("/{roomId}/hint")
-    public void hint(@DestinationVariable String roomId, HintRequest hintRequest){
-        gameService.hint(roomId, hintRequest);
+    public HintResponse hint(@DestinationVariable String roomId, HintRequest hintRequest){
+        return gameService.hint(roomId, hintRequest);
     }
 }
