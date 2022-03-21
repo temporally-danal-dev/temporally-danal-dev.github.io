@@ -13,10 +13,11 @@ import java.util.Random;
 @NoArgsConstructor
 public class GameSession {
     String answer;
-    List<User> playerList = new ArrayList<>();
-    User turn;
+    List<String> playerList = new ArrayList<>();
+    String turn;
+    boolean[] hint;
 
-    public User changeTurn(){
+    public String changeTurn(){
         return this.turn = playerList.indexOf(this.turn) == 0 ? playerList.get(1) : playerList.get(0);
     }
 

@@ -10,6 +10,6 @@ public class ErrorResponse {
     private String errorMsg;
 
     public enum ErrorType {
-        TURN, LENGTH, VALUE;
+        TURN, LENGTH, VALUE, HINT;
     }
 }

@@ -36,11 +36,12 @@ public class GameService {
         GameSession gameSession;
         if(gameList.containsKey(roomId)){
             gameSession = gameList.get(roomId);
-            gameSession.getPlayerList().add(new User(req.getNickname(), false));
+            gameSession.getPlayerList().add(req.getNickname());
 
         } else {
             gameSession = new GameSession();
-            gameSession.getPlayerList().add(new User(req.getNickname(), false));
+            gameSession.getPlayerList().add(req.getNickname());
+            gameSession.setHint(new boolean[2]);
 
             List<Word> wordList = gameDao.findAll();
             Collections.shuffle(wordList);
@@ -54,7 +55,7 @@ public class GameService {
     public StartResponse start(String roomId) {
         gameList.get(roomId).firstTurn();
         GameSession gameSession = gameList.get(roomId);
-        return new StartResponse(gameSession.getTurn().getNickname(),gameSession.getAnswer().length());
+        return new StartResponse(gameSession.getTurn(),gameSession.getAnswer().length());
     }
 
     public SubmitResponse submit(String roomId, SubmitRequest submitRequest) {
@@ -72,7 +73,7 @@ public class GameService {
             }
         }
 
-        return new SubmitResponse(input, output, gameList.get(roomId).changeTurn().getNickname());
+        return new SubmitResponse(input, output, gameList.get(roomId).changeTurn());
     }
 
     public ErrorResponse validationCheck(String roomId, SubmitRequest submitRequest){
@@ -82,6 +83,15 @@ public class GameService {
             return new ErrorResponse(ErrorResponse.ErrorType.LENGTH,"입력값의 길이가 올바르지 않습니다.");
         } else if(GameUtil.validationValueCheck(submitRequest.getWord())){
             return new ErrorResponse(ErrorResponse.ErrorType.VALUE,"영어 소문자만 입력해주세요.");
+        }
+        return null;
+    }
+
+    public ErrorResponse hintCheck(String roomId, HintRequest hintRequest){
+        if(GameUtil.validationTurnCheck(gameList.get(roomId),hintRequest.getNickname())){
+            return new ErrorResponse(ErrorResponse.ErrorType.TURN,"플레이어의 턴이 아닙니다.");
+        } else if(GameUtil.validationHintCheck(gameList.get(roomId),hintRequest.getNickname())){
+            return new ErrorResponse(ErrorResponse.ErrorType.HINT,"이미 힌트를 사용했습니다.");
         }
         return null;
     }
@@ -104,6 +114,9 @@ public class GameService {
     }
 
     public HintResponse hint(String roomId, HintRequest hintRequest) {
+
+        gameList.get(roomId).getHint()[gameList.get(roomId).getPlayerList().indexOf(hintRequest.getNickname())] = true;
+
         int location = hintRequest.getLocation();
         String answer = gameList.get(roomId).getAnswer();
         char hintChar = answer.charAt(location);
