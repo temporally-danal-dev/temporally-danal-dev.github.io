@@ -8,7 +8,21 @@
       <div class="title-box" style="background-color: yellow">H</div>
     </div>
     <div id="game-board">
-      <h2>ANSWERS</h2>
+      <div id="header">
+        <h2>ANSWERS</h2>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <div>
+            <strong>Timer: {{ timer }}</strong>
+          </div>
+        </div>
+      </div>
     </div>
     <div
       v-if="myTurn === true"
@@ -79,6 +93,7 @@ export default {
       guessCount: 0,
       myTurn: false,
       hint: true,
+      timer: 0,
     };
   },
   methods: {
@@ -374,6 +389,11 @@ export default {
       this.onFailed
     );
     window.addEventListener("beforeunload", this.unLoadEvent);
+    setInterval(() => {
+      if (this.timer > 0) {
+        this.timer--;
+      }
+    }, 1000);
     // document.addEventListener("keyup", (e) => {
     //   if (this.myTurn === true) {
     //     let pressedKey = String(e.key);
@@ -401,6 +421,7 @@ export default {
     if (this.stompClient) {
       this.stompClient.disconnect();
     }
+    sessionStorage.clear();
     next();
   },
 };
@@ -456,5 +477,11 @@ export default {
 
 .hint-row {
   margin: 0.5rem 0;
+}
+
+#header {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }
 </style>

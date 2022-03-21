@@ -30,15 +30,15 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.name === "Match") {
-    if (from.name === "Home") {
-      next();
-    } else {
-      next({ name: "Home" });
-    }
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.name === "Match") {
+//     if (from.name === "Home") {
+//       next();
+//     } else {
+//       next({ name: "Home" });
+//     }
+//   } else {
+//     next();
+//   }
+// });
 export default router;
