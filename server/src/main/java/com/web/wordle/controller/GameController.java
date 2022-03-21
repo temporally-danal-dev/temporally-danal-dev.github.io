@@ -54,7 +54,14 @@ public class GameController {
     }
 
     @MessageMapping("/{roomId}/hint")
-    public HintResponse hint(@DestinationVariable String roomId, HintRequest hintRequest){
-        return gameService.hint(roomId, hintRequest);
+    public void hint(@DestinationVariable String roomId, HintRequest hintRequest){
+        ErrorResponse errorResponse = gameService.hintCheck(roomId,hintRequest);
+
+        if(errorResponse != null){
+            template.convertAndSend("/sub/"+hintRequest.getNickname()+"/hint", errorResponse);
+            return;
+        }
+
+        template.convertAndSend("/sub/" + roomId + "/hint", gameService.hint(roomId, hintRequest));
     }
 }
