@@ -52,4 +52,9 @@ public class GameController {
             template.convertAndSend("/sub/" + roomId + "/end", new EndResponse(submitRequest.getNickname(), submitRequest.getWord()));
         }
     }
+
+    @MessageMapping("/{roomId}/hint")
+    public void hint(@DestinationVariable String roomId, HintRequest hintRequest){
+        gameService.hint(roomId, hintRequest);
+    }
 }

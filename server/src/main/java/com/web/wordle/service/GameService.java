@@ -10,7 +10,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -37,15 +36,14 @@ public class GameService {
         GameSession gameSession;
         if(gameList.containsKey(roomId)){
             gameSession = gameList.get(roomId);
-            gameSession.getPlayerList().add(req.getNickname());
+            gameSession.getPlayerList().add(new User(req.getNickname(), false));
 
         } else {
             gameSession = new GameSession();
-            gameSession.getPlayerList().add(req.getNickname());
+            gameSession.getPlayerList().add(new User(req.getNickname(), false));
 
             List<Word> wordList = gameDao.findAll();
             Collections.shuffle(wordList);
-            System.out.println(wordList.get(0).getWord());
             gameSession.setAnswer(wordList.get(0).getWord());
         }
 
@@ -56,7 +54,7 @@ public class GameService {
     public StartResponse start(String roomId) {
         gameList.get(roomId).firstTurn();
         GameSession gameSession = gameList.get(roomId);
-        return new StartResponse(gameSession.getTurn(),gameSession.getAnswer().length());
+        return new StartResponse(gameSession.getTurn().getNickname(),gameSession.getAnswer().length());
     }
 
     public SubmitResponse submit(String roomId, SubmitRequest submitRequest) {
@@ -74,7 +72,7 @@ public class GameService {
             }
         }
 
-        return new SubmitResponse(input, output, gameList.get(roomId).changeTurn());
+        return new SubmitResponse(input, output, gameList.get(roomId).changeTurn().getNickname());
     }
 
     public ErrorResponse validationCheck(String roomId, SubmitRequest submitRequest){
@@ -103,5 +101,26 @@ public class GameService {
         String roomId = connectedUsers.get(sessionId);
         if(roomId.equals(null) || gameList.get(roomId).equals(null)) return;
         template.convertAndSend("/sub/" + roomId+"/end", new EndResponse("",gameList.get(roomId).getAnswer()));
+    }
+
+    public HintResponse hint(String roomId, HintRequest hintRequest) {
+        int location = hintRequest.getLocation();
+        String answer = gameList.get(roomId).getAnswer();
+        char hintChar = answer.charAt(location);
+
+        StringBuilder word = new StringBuilder();
+        StringBuilder matchStatus = new StringBuilder();
+
+        for(int i = 0; i < answer.length(); i++){
+            if(location == i) {
+                word.append(hintChar);
+                matchStatus.append("2");
+            } else {
+                word.append(" ");
+                matchStatus.append("0");
+            }
+        }
+
+        return new HintResponse(hintRequest.getNickname(), word.toString(), matchStatus.toString());
     }
 }
