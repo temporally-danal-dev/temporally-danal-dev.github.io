@@ -309,28 +309,28 @@ export default {
       this.onFailed
     );
     window.addEventListener("beforeunload", this.unLoadEvent);
-    document.addEventListener("keyup", (e) => {
-      if (this.myTurn === true) {
-        let pressedKey = String(e.key);
-        if (pressedKey === "Backspace" && this.nextLetter !== 0) {
-          this.deleteLetter();
-          return;
-        }
-        if (pressedKey === "Enter") {
-          this.submit();
-          return;
-        }
-        if (
-          pressedKey.length === 1 &&
-          pressedKey.charCodeAt(0) > 96 &&
-          pressedKey.charCodeAt(0) < 123
-        ) {
-          this.insertLetter(pressedKey);
-        } else {
-          return;
-        }
-      }
-    });
+    // document.addEventListener("keyup", (e) => {
+    //   if (this.myTurn === true) {
+    //     let pressedKey = String(e.key);
+    //     if (pressedKey === "Backspace" && this.nextLetter !== 0) {
+    //       this.deleteLetter();
+    //       return;
+    //     }
+    //     if (pressedKey === "Enter") {
+    //       this.submit();
+    //       return;
+    //     }
+    //     if (
+    //       pressedKey.length === 1 &&
+    //       pressedKey.charCodeAt(0) > 96 &&
+    //       pressedKey.charCodeAt(0) < 123
+    //     ) {
+    //       this.insertLetter(pressedKey);
+    //     } else {
+    //       return;
+    //     }
+    //   }
+    // });
   },
   beforeRouteLeave(to, from, next) {
     if (this.stompClient) {
