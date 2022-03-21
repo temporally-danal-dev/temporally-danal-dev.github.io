@@ -87,6 +87,8 @@ export default {
       alert(body.ErrorMsg);
       if (body.ErrorType === "TURN") {
         this.myTurn = false;
+      } else if (body.ErrorType === "HINT") {
+        this.hint = false;
       } else {
         while (this.currentGuess.length > 0) {
           this.deleteLetter();
