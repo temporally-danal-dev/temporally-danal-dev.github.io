@@ -94,6 +94,7 @@ export default {
       myTurn: false,
       hint: true,
       timer: 0,
+      timerId: null,
     };
   },
   methods: {
@@ -223,7 +224,8 @@ export default {
           }, delay);
         }
       }
-
+      clearInterval(this.timerId);
+      this.timerId = null;
       this.guessCount += 1;
       this.currentGuess = [];
       this.nextLetter = 0;
@@ -389,7 +391,7 @@ export default {
       this.onFailed
     );
     window.addEventListener("beforeunload", this.unLoadEvent);
-    setInterval(() => {
+    this.timerId = setInterval(() => {
       if (this.timer > 0) {
         this.timer--;
       }
