@@ -2,7 +2,7 @@
   <div class="nav">
     <button type="button" @click="onClick">Rule</button>
     <div class="modal" v-if="show">
-      <div class="modalBody" style="text-align: left">
+      <div class="modalBody" style="text-align: left; padding: 0.5rem">
         <button @click="onClick" class="closeBtn">X</button>
         <div class="header">
           <h1>Rule</h1>
@@ -16,7 +16,10 @@
               Decision about who is the first is also
               <strong>Random</strong> too.
             </li>
-            <li>If you send answer earlier then your opponent, you win.</li>
+            <li>
+              If you send correct answer earlier,<br />
+              you win.
+            </li>
           </ul>
           <h2>Ingame Rule</h2>
           <ul>
@@ -31,6 +34,19 @@
             <li>
               Else, letter will be painted <span style="color: grey">Grey</span>
             </li>
+          </ul>
+          <h2>Hint</h2>
+          <ul>
+            <li>You can use your Hint one time in a match</li>
+            <li>
+              If you hava a chance to use hint, <br />then hint buttons will be
+              displayed
+            </li>
+            <li>
+              When you click hint button,<br />you can see which letter is in
+              your choice
+            </li>
+            <li>This hint will be opened to both players</li>
           </ul>
         </div>
       </div>
