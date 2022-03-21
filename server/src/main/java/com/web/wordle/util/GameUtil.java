@@ -10,7 +10,7 @@ import java.util.List;
 public class GameUtil {
 
     public static boolean validationTurnCheck(GameSession gameSession, String nickname){
-        return !gameSession.getTurn().equals(nickname);
+        return !gameSession.getTurn().getNickname().equals(nickname);
     }
 
     public static boolean validationLengthCheck(GameSession gameSession,String word){
