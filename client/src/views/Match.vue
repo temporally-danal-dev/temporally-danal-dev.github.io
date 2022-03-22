@@ -120,6 +120,7 @@ export default {
         this.myTurn = false;
       }
       const who = this.me !== body.nickname ? "opponent's" : "your";
+      this.timer = 120;
       this.insertBox(who);
       this.insertHint();
     },
@@ -127,7 +128,9 @@ export default {
       const body = JSON.parse(res.body);
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
       const who = this.me === body.nickname ? "your" : "opponent's";
-      this.insertBox(who);
+      const event = body.timeOut === true ? "timeOut" : "submit";
+      this.insertBox(who, body.timeOut);
+      this.timer = 120;
       for (let i = 0; i < this.answerLength; i++) {
         let letterColor = "";
         let box = row.children[i];
@@ -354,6 +357,8 @@ export default {
       let nameRow = document.createElement("div");
       if (event === "hint") {
         nameRow.textContent = `${who} hint`;
+      } else if (event === "timeout") {
+        nameRow.textContent = `${who} time out`;
       } else {
         nameRow.textContent = `${who} answer`;
       }

@@ -23,6 +23,7 @@
           </ul>
           <h2>Ingame Rule</h2>
           <ul>
+            <li>Each turn has 120 seconds</li>
             <li>
               Letter fited perfect will be painted
               <span style="color: green">Green</span>
