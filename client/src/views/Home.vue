@@ -60,7 +60,7 @@ export default {
       this.matched = true;
       axios({
         method: "GET",
-        url: `http://localhost:8080/matching/${this.key}`,
+        url: `https://mighty-basin-66401.herokuapp.com/matching/${this.key}`,
       })
         .then((response) => {
           const waiting = document.querySelector("h2");
@@ -97,7 +97,7 @@ export default {
       if (this.matched) {
         axios({
           method: "GET",
-          url: `http://localhost:8080/delete/${this.key}`,
+          url: `https://mighty-basin-66401.herokuapp.com/delete/${this.key}`,
         })
           .then((response) => {
             console.log(response);

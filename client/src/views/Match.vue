@@ -383,7 +383,9 @@ export default {
     this.roomId = sessionStorage.getItem("roomId");
     this.me = sessionStorage.getItem("me");
     this.opponent = sessionStorage.getItem("opponent");
-    const socket = new SockJs("http://localhost:8080/socket");
+    const socket = new SockJs(
+      "https://mighty-basin-66401.herokuapp.com/socket"
+    );
     this.stompClient = stomp.over(socket);
     this.stompClient.connect(
       { roomId: this.roomId, nickname: this.me },
