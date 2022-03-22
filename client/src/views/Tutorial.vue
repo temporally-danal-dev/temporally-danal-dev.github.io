@@ -10,7 +10,7 @@
       <div class="title-box" style="background-color: yellow">A</div>
       <div class="title-box" style="background-color: grey">L</div>
     </div>
-    <div id="game-board" style="overflow: auto">
+    <div id="game-board">
       <h2>ANSWERS</h2>
     </div>
     <div id="keyboard-cont" style="margin-top: 30px">

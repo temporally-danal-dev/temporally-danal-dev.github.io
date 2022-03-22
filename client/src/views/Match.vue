@@ -477,6 +477,7 @@ export default {
   border: solid;
   height: 600px;
   margin-top: 20px;
+  overflow: auto;
 }
 
 .hint-row {
