@@ -139,6 +139,7 @@ export default {
       if (guessString === this.answer) {
         alert("You guessed right! Game over!");
         this.gCount = 0;
+        this.$router.push({ name: "Home" });
         return;
       } else {
         this.gCount += 1;
