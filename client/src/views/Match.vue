@@ -129,7 +129,7 @@ export default {
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
       const who = this.me === body.nickname ? "your" : "opponent's";
       const event = body.timeOut === true ? "timeOut" : "submit";
-      this.insertBox(who, body.timeOut);
+      this.insertBox(who, event);
       this.timer = 120;
       for (let i = 0; i < this.answerLength; i++) {
         let letterColor = "";
