@@ -8,7 +8,7 @@
       <div class="title-box" style="background-color: yellow">H</div>
     </div>
     <div id="game-board">
-      <div id="header">
+      <div class="header">
         <h2>ANSWERS</h2>
         <div
           style="
@@ -218,7 +218,7 @@ export default {
         } else {
           let delay = 250 * i;
           let winner;
-          if (body.nickname === this.me || body.nicknmae === "") {
+          if (body.nickname === this.me || body.nickname === "") {
             winner = "You";
           } else {
             winner = "Opponent";
@@ -494,9 +494,13 @@ export default {
   margin: 0.5rem 0;
 }
 
-#header {
+.header {
   display: flex;
   justify-content: space-around;
   width: 100%;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  border: solid;
 }
 </style>

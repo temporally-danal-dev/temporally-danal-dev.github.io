@@ -11,7 +11,9 @@
       <div class="title-box" style="background-color: grey">L</div>
     </div>
     <div id="game-board">
-      <h2>ANSWERS</h2>
+      <div class="header">
+        <h2>ANSWERS</h2>
+      </div>
     </div>
     <div id="keyboard-cont" style="margin-top: 30px">
       <div class="first-row">
