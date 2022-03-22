@@ -120,7 +120,7 @@ export default {
         this.myTurn = false;
       }
       const who = this.me !== body.nickname ? "opponent's" : "your";
-      this.timer = 120;
+      this.timer = 90;
       this.insertBox(who);
       this.insertHint();
     },
@@ -130,7 +130,7 @@ export default {
       const who = this.me === body.nickname ? "your" : "opponent's";
       const event = body.timeOut === true ? "timeOut" : "submit";
       this.insertBox(who, event);
-      this.timer = 120;
+      this.timer = 90;
       for (let i = 0; i < this.answerLength; i++) {
         let letterColor = "";
         let box = row.children[i];
