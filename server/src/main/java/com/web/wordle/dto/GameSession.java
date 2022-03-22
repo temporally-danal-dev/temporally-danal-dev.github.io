@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -16,6 +14,7 @@ public class GameSession {
     List<String> playerList = new ArrayList<>();
     String turn;
     boolean[] hint;
+    Timer timer;
 
     public String changeTurn(){
         return this.turn = playerList.indexOf(this.turn) == 0 ? playerList.get(1) : playerList.get(0);

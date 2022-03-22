@@ -10,9 +10,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -42,6 +40,7 @@ public class GameService {
             gameSession = new GameSession();
             gameSession.getPlayerList().add(req.getNickname());
             gameSession.setHint(new boolean[2]);
+            gameSession.setTimer(new Timer());
 
             List<Word> wordList = gameDao.findAll();
             Collections.shuffle(wordList);
@@ -55,25 +54,46 @@ public class GameService {
     public StartResponse start(String roomId) {
         gameList.get(roomId).firstTurn();
         GameSession gameSession = gameList.get(roomId);
+        setGameSessionTimerTask(roomId);
         return new StartResponse(gameSession.getTurn(),gameSession.getAnswer().length());
     }
 
     public SubmitResponse submit(String roomId, SubmitRequest submitRequest) {
         String input = submitRequest.getWord();
         String answer = gameList.get(roomId).getAnswer();
-        String output = "";
+        StringBuilder output = new StringBuilder();
 
+        setGameSessionTimerTask(roomId);
         for(int i = 0; i < answer.length(); i++){
             if(input.charAt(i) == answer.charAt(i)){//전부 일치
-                output +="2";
+                output.append("2");
             } else if(answer.contains(input.substring(i,i+1))){//글자만 일치
-                output +="1";
+                output.append("1");
             } else {
-                output +="0";
+                output.append("0");
             }
         }
 
-        return new SubmitResponse(input, output, gameList.get(roomId).changeTurn());
+        return new SubmitResponse(input, output.toString(), gameList.get(roomId).changeTurn());
+    }
+
+    public void setGameSessionTimerTask(String roomId){
+
+        gameList.get(roomId).getTimer().cancel();
+        gameList.get(roomId).setTimer(new Timer());
+
+        String generatedString = GameUtil.generateRandomString(gameList.get(roomId).getAnswer().length());
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                SubmitResponse submitResponse = submit(roomId,new SubmitRequest(generatedString,gameList.get(roomId).getTurn()));
+                submitResponse.setTimeOut(true);
+                template.convertAndSend("/sub/"+roomId+"/submit", submitResponse);
+            }
+        };
+
+        gameList.get(roomId).getTimer().schedule(task,90000);
     }
 
     public ErrorResponse validationCheck(String roomId, SubmitRequest submitRequest){
@@ -109,7 +129,7 @@ public class GameService {
     public void disconnectUser(String sessionId) {
         //세션에 있는 룸아이디로 전부 end 요청 보내주기.
         String roomId = connectedUsers.get(sessionId);
-        if(roomId.equals(null) || gameList.get(roomId).equals(null)) return;
+        if(roomId.equals(null) || gameList.get(roomId) == null) return;
         template.convertAndSend("/sub/" + roomId+"/end", new EndResponse("",gameList.get(roomId).getAnswer()));
     }
 

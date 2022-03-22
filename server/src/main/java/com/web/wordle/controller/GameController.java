@@ -28,8 +28,8 @@ public class GameController {
         log.info("JOIN");
         GameSession gameSession = gameService.join(roomId,req);
         if(gameSession.getPlayerList().size()==2){
-            StartResponse startResponse = gameService.start(roomId);
-            template.convertAndSend("/sub/" + roomId+"/start", startResponse);;
+            log.info("START");
+            template.convertAndSend("/sub/" + roomId+"/start", gameService.start(roomId));;
         }
     }
     //submit  answer, nickname, turn(optional) => nickname, answer , ball count , turn(optional),next(optional)
@@ -45,8 +45,7 @@ public class GameController {
 
         if(gameService.end(roomId,submitRequest.getWord())){//게임 속행
             log.info("SUBMIT");
-            SubmitResponse submitResponse = gameService.submit(roomId,submitRequest);
-            template.convertAndSend("/sub/" + roomId+"/submit", submitResponse);
+            template.convertAndSend("/sub/" + roomId+"/submit", gameService.submit(roomId,submitRequest));
         } else {// 게임 종료
             log.info("END");
             template.convertAndSend("/sub/" + roomId + "/end", new EndResponse(submitRequest.getNickname(), submitRequest.getWord()));
