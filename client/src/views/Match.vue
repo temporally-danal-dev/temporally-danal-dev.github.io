@@ -217,12 +217,16 @@ export default {
           }, delay);
         } else {
           let delay = 250 * i;
+          let winner;
+          if (body.nickname === this.me || body.nicknmae === "") {
+            winner = "You";
+          } else {
+            winner = "Opponent";
+          }
           setTimeout(() => {
             //shade box
             alert(
-              `The answer was ${body.word.toUpperCase()}, winner is ${
-                body.nickname === this.me ? "You" : "Opponent"
-              }`
+              `The answer was ${body.word.toUpperCase()}, winner is ${winner}`
             );
           }, delay);
         }
