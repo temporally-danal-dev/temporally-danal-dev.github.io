@@ -204,28 +204,34 @@ export default {
   },
   mounted() {
     this.insertInput();
-    // document.addEventListener("keyup", (e) => {
-    //   let pressedKey = String(e.key);
-    //   if (pressedKey === "Backspace" && this.nLetter !== 0) {
-    //     this.deleteLetter();
-    //     return;
-    //   }
+    document.addEventListener("keyup", (e) => {
+      let pressedKey = String(e.key);
+      console.log(e.key);
+      if (pressedKey === "Backspace" && this.nLetter !== 0) {
+        this.deleteLetter();
+        return;
+      }
 
-    //   if (pressedKey === "Enter") {
-    //     this.checkGuess();
-    //     return;
-    //   }
+      if (pressedKey === "Enter") {
+        this.checkGuess();
+        return;
+      }
 
-    //   if (
-    //     pressedKey.length === 1 &&
-    //     pressedKey.charCodeAt(0) > 96 &&
-    //     pressedKey.charCodeAt(0) < 123
-    //   ) {
-    //     this.insertLetter(pressedKey);
-    //   } else {
-    //     return;
-    //   }
-    // });
+      if (
+        pressedKey.length === 1 &&
+        pressedKey.charCodeAt(0) > 96 &&
+        pressedKey.charCodeAt(0) < 123
+      ) {
+        this.insertLetter(pressedKey);
+      }
+      if (
+        pressedKey.length === 1 &&
+        pressedKey.charCodeAt(0) > 64 &&
+        pressedKey.charCodeAt(0) < 91
+      ) {
+        this.insertLetter(pressedKey);
+      }
+    });
   },
 };
 </script>
