@@ -232,17 +232,17 @@ export default {
             alert(
               `The answer was ${body.word.toUpperCase()}, winner is ${winner}`
             );
+            clearInterval(this.timerId);
+            this.timerId = null;
+            this.guessCount += 1;
+            this.currentGuess = [];
+            this.nextLetter = 0;
+            this.stompClient.disconnect();
+            this.stompClient = null;
             this.$router.push({ name: "Home" });
           }, delay);
         }
       }
-      clearInterval(this.timerId);
-      this.timerId = null;
-      this.guessCount += 1;
-      this.currentGuess = [];
-      this.nextLetter = 0;
-      this.stompClient.disconnect();
-      this.stompClient = null;
     },
     onConnected() {
       this.stompClient.subscribe(`/sub/${this.roomId}/start`, this.onStart);
