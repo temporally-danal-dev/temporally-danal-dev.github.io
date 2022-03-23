@@ -30,11 +30,6 @@ public class MatchingService {
         String user1 = itr.next();
         String user2 = itr.next();
 
-        //String player1 = GameUtil.generateNickname();
-        //String player2 = GameUtil.generateNickname();
-
-
-
         String uuid = UUID.randomUUID().toString();
 
         DeferredResult<MatchingResponse> user1Result = pool.remove(user1);

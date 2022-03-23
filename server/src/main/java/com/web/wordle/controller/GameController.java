@@ -26,41 +26,44 @@ public class GameController {
     @MessageMapping("/{roomId}/join")
     public void join(@DestinationVariable String roomId, JoinRequest req){
         log.info("JOIN");
-        GameSession gameSession = gameService.join(roomId,req);
-        if(gameSession.getPlayerList().size()==2){
+        if(gameService.join(roomId,req).getPlayerList().size()==2){
             log.info("START");
-            template.convertAndSend("/sub/" + roomId+"/start", gameService.start(roomId));;
+            gameService.start(roomId);
+            //template.convertAndSend("/sub/" + roomId+"/start", gameService.start(roomId));;
         }
     }
     //submit  answer, nickname, turn(optional) => nickname, answer , ball count , turn(optional),next(optional)
     @MessageMapping("/{roomId}/submit")
     public void submit(@DestinationVariable String roomId, SubmitRequest submitRequest){
 
-        ErrorResponse errorResponse = gameService.validationCheck(roomId,submitRequest);
+        //ErrorResponse errorResponse = gameService.validationCheck(roomId,submitRequest);
 
-        if(errorResponse != null){
-            template.convertAndSend("/sub/" + submitRequest.getNickname()+"/error", errorResponse);
+        if(gameService.validationCheck(roomId,submitRequest)){
+            //template.convertAndSend("/sub/" + submitRequest.getNickname()+"/error", errorResponse);
             return;
         }
 
-        if(gameService.end(roomId,submitRequest.getWord())){//게임 속행
+        if(gameService.checkEnd(roomId,submitRequest.getWord())){//게임 속행
             log.info("SUBMIT");
-            template.convertAndSend("/sub/" + roomId+"/submit", gameService.submit(roomId,submitRequest));
+            gameService.submit(roomId,submitRequest, false);
         } else {// 게임 종료
             log.info("END");
-            template.convertAndSend("/sub/" + roomId + "/end", new EndResponse(submitRequest.getNickname(), submitRequest.getWord()));
+            gameService.end(roomId, submitRequest.getNickname(), submitRequest.getWord());
+            //gameService.messageSend(gameService.generateAddress(roomId,"end"),new EndResponse(submitRequest.getNickname(), submitRequest.getWord()));
+            //template.convertAndSend("/sub/" + roomId + "/end", new EndResponse(submitRequest.getNickname(), submitRequest.getWord()));
         }
     }
 
     @MessageMapping("/{roomId}/hint")
     public void hint(@DestinationVariable String roomId, HintRequest hintRequest){
-        ErrorResponse errorResponse = gameService.hintCheck(roomId,hintRequest);
+        //ErrorResponse errorResponse = gameService.hintCheck(roomId,hintRequest);
 
-        if(errorResponse != null){
-            template.convertAndSend("/sub/"+hintRequest.getNickname()+"/hint", errorResponse);
+        if(gameService.hintCheck(roomId,hintRequest)){
+            //template.convertAndSend("/sub/"+hintRequest.getNickname()+"/hint", errorResponse);
             return;
         }
 
-        template.convertAndSend("/sub/" + roomId + "/hint", gameService.hint(roomId, hintRequest));
+        gameService.hint(roomId, hintRequest);
+        //template.convertAndSend("/sub/" + roomId + "/hint", gameService.hint(roomId, hintRequest));
     }
 }
