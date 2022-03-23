@@ -113,6 +113,7 @@ export default {
         while (this.currentGuess.length > 0) {
           this.deleteLetter();
         }
+        this.myTurn = true;
       }
     },
     onStart(res) {
