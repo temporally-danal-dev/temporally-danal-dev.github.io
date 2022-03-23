@@ -417,7 +417,7 @@ export default {
         return;
       }
       if (pressedKey === "Enter") {
-        this.checkGuess();
+        this.submit();
         return;
       }
       if (
