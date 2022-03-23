@@ -1,5 +1,6 @@
 package com.web.wordle.dto;
 
+import com.web.wordle.util.GameUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,13 +18,12 @@ public class GameSession {
     Timer timer;
 
     public String changeTurn(){
-        return this.turn = playerList.indexOf(this.turn) == 0 ? playerList.get(1) : playerList.get(0);
+        this.turn = playerList.indexOf(this.turn) == 0 ? playerList.get(1) : playerList.get(0);
+        return this.turn;
     }
 
     public void firstTurn(){
-        Random random = new Random();
-        random.setSeed(System.currentTimeMillis());
-        this.turn = playerList.get(random.nextInt(1));
+        this.turn = playerList.get(GameUtil.generateRandomInt());
     }
 
 }

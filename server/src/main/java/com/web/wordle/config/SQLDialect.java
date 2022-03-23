@@ -28,8 +28,7 @@ public class SQLDialect extends Dialect {
         registerColumnType(Types.TIMESTAMP, "timestamp");
         registerColumnType(Types.BINARY, "blob");
         registerColumnType(Types.VARBINARY, "blob");
-        registerColumnType(Types.LONGVARBINARY, "blob"); //
-        //registerColumnType(Types.NULL, "null");
+        registerColumnType(Types.LONGVARBINARY, "blob");
         registerColumnType(Types.BLOB, "blob");
         registerColumnType(Types.CLOB, "clob");
         registerColumnType(Types.BOOLEAN, "integer");
@@ -50,7 +49,6 @@ public class SQLDialect extends Dialect {
     }
 
     public String getIdentityColumnString() {
-        // return "integer primary key autoincrement";
         return "integer";
     }
 
