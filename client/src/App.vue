@@ -2,7 +2,7 @@
   <div id="app">
     <div class="body">
       <Rule />
-      <div style="display: flex; justify-content: center; margin-top: 50px">
+      <div style="display: flex; justify-content: center; margin-top: 20px">
         <router-view />
       </div>
     </div>

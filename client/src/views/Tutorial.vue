@@ -16,6 +16,9 @@
       </div>
     </div>
     <div id="keyboard-cont" style="margin-top: 30px">
+      <div class="error-row" v-show="error">
+        <strong>{{ errorMsg }}</strong>
+      </div>
       <div class="first-row">
         <button class="keyboard-button" @click="onClick">q</button>
         <button class="keyboard-button" @click="onClick">w</button>
@@ -64,6 +67,8 @@ export default {
       cGuess: [],
       nLetter: 0,
       gCount: 0,
+      errorMsg: "",
+      error: false,
     };
   },
   methods: {
@@ -100,9 +105,8 @@ export default {
       }
 
       if (guessString.length !== 5) {
-        alert("Not enough letters!");
-        console.log(this.cGuess);
-        console.log(guessString);
+        this.error = true;
+        this.errorMsg = "Not enough letters!";
         return;
       }
 
@@ -114,32 +118,26 @@ export default {
         let letter = this.cGuess[i];
 
         let letterPosition = rightGuess.indexOf(this.cGuess[i]);
-        // is letter in the correct guess
         if (letterPosition === -1) {
           letterColor = "grey";
         } else {
-          // now, letter is definitely in word
-          // if letter index and right guess index are the same
-          // letter is in the right position
           if (this.cGuess[i] === rightGuess[i]) {
-            // shade green
             letterColor = "green";
           } else {
-            // shade box yellow
             letterColor = "yellow";
           }
         }
 
         let delay = 250 * i;
         setTimeout(() => {
-          //shade box
           box.style.backgroundColor = letterColor;
           this.shadeKeyBoard(letter, letterColor);
         }, delay);
       }
 
       if (guessString === this.answer) {
-        alert("You guessed right! Game over!");
+        this.error = true;
+        this.errorMsg = "You guessed right! Game over!";
         this.gCount = 0;
         this.$router.push({ name: "Home" });
         return;
@@ -156,11 +154,9 @@ export default {
           if (oldColor === "green") {
             return;
           }
-
           if (oldColor === "yellow" && color !== "green") {
             return;
           }
-
           elem.style.backgroundColor = color;
           break;
         }
@@ -168,6 +164,8 @@ export default {
     },
     onClick(e) {
       let pressedKey = String(e.target.textContent);
+      this.error = false;
+      this.errorMsg = "";
       if (pressedKey === "Del" && this.nLetter !== 0) {
         this.deleteLetter();
         return;
@@ -205,6 +203,8 @@ export default {
   mounted() {
     this.insertInput();
     document.addEventListener("keyup", (e) => {
+      this.error = false;
+      this.errorMsg = "";
       let pressedKey = String(e.key);
       console.log(e.key);
       if (pressedKey === "Backspace" && this.nLetter !== 0) {
@@ -303,5 +303,10 @@ h1 {
   margin: 0 2px;
   cursor: pointer;
   text-transform: uppercase;
+}
+
+.error-row {
+  margin: 0.5rem 0;
+  color: red;
 }
 </style>

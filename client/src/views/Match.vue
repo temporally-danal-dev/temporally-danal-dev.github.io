@@ -35,6 +35,7 @@
       <strong> Opponent Turn </strong>
     </div>
     <div id="keyboard-cont">
+      <div class="error-row" v-show="error">{{ errorMsg }}</div>
       <div class="hint-row" v-show="myTurn && hint"></div>
       <div class="first-row">
         <button class="keyboard-button" @click="onKeyboardClick">q</button>
@@ -95,12 +96,15 @@ export default {
       hint: true,
       timer: 0,
       timerId: null,
+      error: false,
+      errorMsg: "",
     };
   },
   methods: {
     onError(res) {
       const body = JSON.parse(res.body);
-      alert(body.ErrorMsg);
+      this.erorr = true;
+      this.erorrMsg = body.ErrorMsg;
       if (body.ErrorType === "TURN") {
         this.myTurn = false;
       } else if (body.ErrorType === "HINT") {
@@ -261,22 +265,19 @@ export default {
     },
     submit() {
       let guessString = "";
-
       for (const val of this.currentGuess) {
         guessString += val;
       }
-
       if (guessString.length !== this.answerLength) {
-        alert("Not enough letters!");
+        this.error = true;
+        this.errorMsg = "Not enough letters!";
         return;
       }
-
       const msg = {
         nickname: this.me,
         word: guessString,
       };
       this.stompClient.send(`/pub/${this.roomId}/submit`, JSON.stringify(msg));
-
       this.myTurn = false;
     },
     insertLetter(pressedKey) {
@@ -310,11 +311,9 @@ export default {
           if (oldColor === "green") {
             return;
           }
-
           if (oldColor === "yellow" && color !== "green") {
             return;
           }
-
           elem.style.backgroundColor = color;
           break;
         }
@@ -323,16 +322,16 @@ export default {
     onKeyboardClick(e) {
       if (this.myTurn === true) {
         let pressedKey = String(e.target.textContent);
+        this.error = false;
+        this.errorMsg = "";
         if (pressedKey === "Del" && this.nextLetter !== 0) {
           this.deleteLetter();
           return;
         }
-
         if (pressedKey === "Enter") {
           this.submit();
           return;
         }
-
         if (
           pressedKey.length === 1 &&
           pressedKey.charCodeAt(0) > 96 &&
@@ -353,7 +352,8 @@ export default {
         };
         this.stompClient.send(`/pub/${this.roomId}/hint`, JSON.stringify(msg));
       } else {
-        alert("you can't use hint");
+        this.error = true;
+        this.errorMsg = "you can't use hint";
       }
     },
     insertBox(who, event = "submit") {
@@ -410,17 +410,16 @@ export default {
     }, 1000);
     document.addEventListener("keyup", (e) => {
       let pressedKey = String(e.key);
-      console.log(e.key);
+      this.error = false;
+      this.errorMsg = "";
       if (pressedKey === "Backspace" && this.nLetter !== 0) {
         this.deleteLetter();
         return;
       }
-
       if (pressedKey === "Enter") {
         this.checkGuess();
         return;
       }
-
       if (
         pressedKey.length === 1 &&
         pressedKey.charCodeAt(0) > 96 &&
@@ -491,7 +490,7 @@ export default {
   align-items: center;
   flex-direction: column;
   border: solid;
-  height: 600px;
+  height: 530px;
   margin-top: 20px;
   overflow: auto;
 }
