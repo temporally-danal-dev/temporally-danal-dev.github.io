@@ -232,6 +232,7 @@ export default {
             alert(
               `The answer was ${body.word.toUpperCase()}, winner is ${winner}`
             );
+            this.$router.push({ name: "Home" });
           }, delay);
         }
       }
@@ -242,7 +243,6 @@ export default {
       this.nextLetter = 0;
       this.stompClient.disconnect();
       this.stompClient = null;
-      this.$router.push({ name: "Home" });
     },
     onConnected() {
       this.stompClient.subscribe(`/sub/${this.roomId}/start`, this.onStart);

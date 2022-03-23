@@ -112,40 +112,41 @@ export default {
 
       this.insertInput();
 
-      for (let i = 0; i < 5; i++) {
-        let letterColor = "";
-        let box = row.children[i];
-        let letter = this.cGuess[i];
+      for (let i = 0; i < 6; i++) {
+        if (i < 5) {
+          let letterColor = "";
+          let box = row.children[i];
+          let letter = this.cGuess[i];
 
-        let letterPosition = rightGuess.indexOf(this.cGuess[i]);
-        if (letterPosition === -1) {
-          letterColor = "grey";
-        } else {
-          if (this.cGuess[i] === rightGuess[i]) {
-            letterColor = "green";
+          let letterPosition = rightGuess.indexOf(this.cGuess[i]);
+          if (letterPosition === -1) {
+            letterColor = "grey";
           } else {
-            letterColor = "yellow";
+            if (this.cGuess[i] === rightGuess[i]) {
+              letterColor = "green";
+            } else {
+              letterColor = "yellow";
+            }
           }
+          let delay = 250 * i;
+          setTimeout(() => {
+            box.style.backgroundColor = letterColor;
+            this.shadeKeyBoard(letter, letterColor);
+          }, delay);
+        } else {
+          let delay = 250 * i;
+          setTimeout(() => {
+            if (guessString === this.answer) {
+              alert("You guessed right! Game over!");
+              this.gCount = 0;
+              this.$router.push({ name: "Home" });
+            }
+          }, delay);
         }
-
-        let delay = 250 * i;
-        setTimeout(() => {
-          box.style.backgroundColor = letterColor;
-          this.shadeKeyBoard(letter, letterColor);
-        }, delay);
       }
-
-      if (guessString === this.answer) {
-        this.error = true;
-        this.errorMsg = "You guessed right! Game over!";
-        this.gCount = 0;
-        this.$router.push({ name: "Home" });
-        return;
-      } else {
-        this.gCount += 1;
-        this.cGuess = [];
-        this.nLetter = 0;
-      }
+      this.gCount += 1;
+      this.cGuess = [];
+      this.nLetter = 0;
     },
     shadeKeyBoard(letter, color) {
       for (const elem of document.getElementsByClassName("keyboard-button")) {
