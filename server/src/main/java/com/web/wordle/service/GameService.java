@@ -64,15 +64,25 @@ public class GameService {
         String answer = gameList.get(roomId).getAnswer();
         StringBuilder output = new StringBuilder();
 
+        int checked[] = new int[answer.length()];
+
         setGameSessionTimerTask(roomId);
         for(int i = 0; i < answer.length(); i++){
-            if(input.charAt(i) == answer.charAt(i)){//전부 일치
-                output.append("2");
-            } else if(answer.contains(input.substring(i,i+1))){//글자만 일치
-                output.append("1");
-            } else {
-                output.append("0");
+            if(input.charAt(i) == answer.charAt(i)) {
+                checked[i] = 2;
+            } else{
+                for(int j = 0; j < answer.length(); j++){
+                    if(checked[j] != 0) continue;
+                    if(input.charAt(i) == answer.charAt(j)){
+                        checked[i] = 1;
+                        break;
+                    }
+                }
             }
+        }
+
+        for(int i = 0; i < answer.length(); i++){
+            output.append(checked[i]);
         }
 
         //새 알고리즘

@@ -2,20 +2,19 @@ package com.web.wordle.service;
 
 import com.web.wordle.dto.MatchingResponse;
 import com.web.wordle.dto.MatchingResponse.ResponseResult;
-import com.web.wordle.util.GameUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @AllArgsConstructor
 public class MatchingService {
-    static Hashtable<String, DeferredResult<MatchingResponse>> pool = new Hashtable<>();
+    static ConcurrentHashMap<String, DeferredResult<MatchingResponse>> pool = new ConcurrentHashMap<>();
 
     @Async("asyncTreadPool")
     public void join(String userId,DeferredResult<MatchingResponse> deferredResult) {
