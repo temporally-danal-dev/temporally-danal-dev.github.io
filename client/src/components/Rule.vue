@@ -89,6 +89,7 @@ export default {
   right: auto;
   width: auto;
   height: auto;
+  z-index: 1;
 }
 
 .modalBody {
