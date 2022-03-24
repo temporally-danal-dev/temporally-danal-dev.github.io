@@ -44,8 +44,7 @@ public class GameService {
 
             List<Word> wordList = gameDao.findAll();
             Collections.shuffle(wordList);
-            gameSession.setAnswer("test");
-            //gameSession.setAnswer(wordList.get(0).getWord());
+            gameSession.setAnswer(wordList.get(0).getWord());
         }
 
         gameList.put(roomId,gameSession);
