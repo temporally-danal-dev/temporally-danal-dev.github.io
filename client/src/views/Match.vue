@@ -222,14 +222,13 @@ export default {
           }, delay);
         } else {
           let delay = 250 * i;
-          let winner;
-          if (body.nickname === this.me || body.nickname === "") {
-            winner = "You";
-          } else {
-            winner = "Opponent";
-          }
           setTimeout(() => {
-            //shade box
+            let winner;
+            if (body.nickname === this.me || body.nickname === "") {
+              winner = "You";
+            } else {
+              winner = "Opponent";
+            }
             alert(
               `The answer was ${body.word.toUpperCase()}, winner is ${winner}`
             );
@@ -377,6 +376,7 @@ export default {
       }
       board.appendChild(nameRow);
       board.appendChild(row);
+      row.scrollIntoView();
     },
     insertHint() {
       const hintRow = document.querySelector(".hint-row");
