@@ -23,13 +23,14 @@
           </ul>
           <h2>Ingame Rule</h2>
           <ul>
-            <li>Each turn has 120 seconds</li>
+            <li>Each turn has 90 seconds</li>
             <li>
               Letter fited perfect will be painted
               <span style="color: green">Green</span>
             </li>
             <li>
-              Letter included in answer will be painted
+              Letter included in answer except letters painted green<br />
+              will be painted
               <span style="color: yellow">Yellow</span>
             </li>
             <li>
