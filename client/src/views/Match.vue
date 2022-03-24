@@ -124,7 +124,7 @@ export default {
       } else {
         this.myTurn = false;
       }
-      const who = this.me !== body.nickname ? "opponent's" : "your";
+      const who = this.me !== body.nickname ? "Opponent's" : "Your";
       this.timer = 90;
       this.insertBox(who);
       this.insertHint();
@@ -132,7 +132,7 @@ export default {
     onSubmit(res) {
       const body = JSON.parse(res.body);
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
-      const who = this.me === body.nickname ? "your" : "opponent's";
+      const who = this.me === body.nickname ? "Your" : "Opponent's";
       const event = body.timeOut === true ? "timeOut" : "submit";
       this.insertBox(who, event);
       this.timer = 90;
@@ -172,8 +172,8 @@ export default {
     onHint(res) {
       const body = JSON.parse(res.body);
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
-      const who = this.me === body.nickname ? "your" : "opponent's";
-      if (who === "your") {
+      const who = this.me === body.nickname ? "Your" : "Opponent's";
+      if (who === "Your") {
         this.hint = false;
       }
       this.insertBox(who, "hint");
