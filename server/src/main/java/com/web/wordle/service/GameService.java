@@ -56,7 +56,6 @@ public class GameService {
         GameSession gameSession = gameList.get(roomId);
         setGameSessionTimerTask(roomId);
         messageSend(generateAddress(roomId,"start"),new StartResponse(gameSession.getTurn(),gameSession.getAnswer().length()));
-        //return new StartResponse(gameSession.getTurn(),gameSession.getAnswer().length());
     }
 
     public void submit(String roomId, SubmitRequest submitRequest, boolean timeOut) {
@@ -65,18 +64,25 @@ public class GameService {
         StringBuilder output = new StringBuilder();
 
         int checked[] = new int[answer.length()];
+        boolean matched[] = new boolean[answer.length()];
 
         setGameSessionTimerTask(roomId);
+
         for(int i = 0; i < answer.length(); i++){
-            if(input.charAt(i) == answer.charAt(i)) {
+            if(input.charAt(i) == answer.charAt(i)) {//같은 위치 글자
                 checked[i] = 2;
-            } else{
-                for(int j = 0; j < answer.length(); j++){
-                    if(checked[j] != 0) continue;
-                    if(input.charAt(i) == answer.charAt(j)){
-                        checked[i] = 1;
-                        break;
-                    }
+                matched[i] = true;
+            }
+        }
+
+        for(int i = 0; i < answer.length(); i++){
+            if(checked[i]== 2) continue;
+            for(int j = 0; j < answer.length(); j++) {
+                if(checked[j] != 0 || matched[j]) continue;
+                if(input.charAt(i) == answer.charAt(j)) {
+                    checked[i] = 1;
+                    matched[j] = true;
+                    break;
                 }
             }
         }
@@ -86,9 +92,7 @@ public class GameService {
         }
 
         //새 알고리즘
-
         messageSend(generateAddress(roomId,"submit"),new SubmitResponse(input, output.toString(), gameList.get(roomId).changeTurn(),timeOut));
-        //return new SubmitResponse(input, output.toString(), gameList.get(roomId).changeTurn());
     }
 
     public void end(String roomId, String nickname, String word) {
@@ -117,8 +121,6 @@ public class GameService {
         }
 
         messageSend(generateAddress(roomId,"hint"),new HintResponse(hintRequest.getNickname(), word.toString(), matchStatus.toString()));
-
-        //return new HintResponse(hintRequest.getNickname(), word.toString(), matchStatus.toString());
     }
 
     public void setGameSessionTimerTask(String roomId){
@@ -131,9 +133,7 @@ public class GameService {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                //SubmitResponse submitResponse = submit(roomId,new SubmitRequest(generatedString,gameList.get(roomId).getTurn()));
                 submit(roomId,new SubmitRequest(generatedString,gameList.get(roomId).getTurn()),true);
-                //template.convertAndSend("/sub/"+roomId+"/submit", submitResponse);
             }
         };
 
@@ -143,15 +143,12 @@ public class GameService {
     public boolean validationCheck(String roomId, SubmitRequest submitRequest){
         if(GameUtil.validationTurnCheck(gameList.get(roomId),submitRequest.getNickname())){
             messageSend(generateAddress(submitRequest.getNickname(),"error"),new ErrorResponse(ErrorResponse.ErrorType.TURN,"플레이어의 턴이 아닙니다."));
-            //return new ErrorResponse(ErrorResponse.ErrorType.TURN,"플레이어의 턴이 아닙니다.");
             return true;
         } else if (GameUtil.validationLengthCheck(gameList.get(roomId),submitRequest.getWord())){
             messageSend(generateAddress(submitRequest.getNickname(),"error"),new ErrorResponse(ErrorResponse.ErrorType.LENGTH,"입력값의 길이가 올바르지 않습니다."));
-            //return new ErrorResponse(ErrorResponse.ErrorType.LENGTH,"입력값의 길이가 올바르지 않습니다.");
             return true;
         } else if(GameUtil.validationValueCheck(submitRequest.getWord())){
             messageSend(generateAddress(submitRequest.getNickname(),"error"),new ErrorResponse(ErrorResponse.ErrorType.VALUE,"영어 소문자만 입력해주세요."));
-            //return new ErrorResponse(ErrorResponse.ErrorType.VALUE,"영어 소문자만 입력해주세요.");
             return true;
         }
         return false;
@@ -161,11 +158,9 @@ public class GameService {
         if(GameUtil.validationTurnCheck(gameList.get(roomId),hintRequest.getNickname())){
             messageSend(generateAddress(hintRequest.getNickname(),"error"),new ErrorResponse(ErrorResponse.ErrorType.TURN,"플레이어의 턴이 아닙니다."));
             return true;
-            //return new ErrorResponse(ErrorResponse.ErrorType.TURN,"플레이어의 턴이 아닙니다.");
         } else if(GameUtil.validationHintCheck(gameList.get(roomId),hintRequest.getNickname())){
             messageSend(generateAddress(hintRequest.getNickname(),"error"),new ErrorResponse(ErrorResponse.ErrorType.HINT,"이미 힌트를 사용했습니다."));
             return true;
-            //return new ErrorResponse(ErrorResponse.ErrorType.HINT,"이미 힌트를 사용했습니다.");
         }
         return false;
     }
@@ -185,7 +180,6 @@ public class GameService {
         String roomId = connectedUsers.get(sessionId);
         if(gameList.get(roomId) == null) return;
         messageSend(generateAddress(roomId,"end"),new EndResponse("",gameList.get(roomId).getAnswer()));
-        //template.convertAndSend("/sub/" + roomId+"/end", new EndResponse("",gameList.get(roomId).getAnswer()));
     }
 
     public String generateAddress(String dest,String act){
