@@ -4,7 +4,7 @@
     <div class="modal" v-if="show">
       <div class="modalBody" style="text-align: left; padding: 0.5rem">
         <button @click="onClick" class="closeBtn">X</button>
-        <div class="header">
+        <div>
           <h1>Rule</h1>
         </div>
         <hr />
