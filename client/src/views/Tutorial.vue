@@ -200,14 +200,10 @@ export default {
 
       board.appendChild(row);
     },
-  },
-  mounted() {
-    this.insertInput();
-    document.addEventListener("keyup", (e) => {
+    onKeyup(e) {
       this.error = false;
       this.errorMsg = "";
       let pressedKey = String(e.key);
-      console.log(e.key);
       if (pressedKey === "Backspace" && this.nLetter !== 0) {
         this.deleteLetter();
         return;
@@ -232,7 +228,14 @@ export default {
       ) {
         this.insertLetter(pressedKey);
       }
-    });
+    },
+  },
+  mounted() {
+    this.insertInput();
+    document.addEventListener("keyup", this.onKeyup);
+  },
+  beforeDestroy() {
+    document.removeEventListener("keyup", this.onKeyup);
   },
 };
 </script>

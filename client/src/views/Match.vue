@@ -389,27 +389,7 @@ export default {
         hintRow.appendChild(button);
       }
     },
-  },
-  mounted() {
-    this.roomId = sessionStorage.getItem("roomId");
-    this.me = sessionStorage.getItem("me");
-    this.opponent = sessionStorage.getItem("opponent");
-    const socket = new SockJs(
-      "https://mighty-basin-66401.herokuapp.com/socket"
-    );
-    this.stompClient = stomp.over(socket);
-    this.stompClient.connect(
-      { roomId: this.roomId, nickname: this.me },
-      this.onConnected,
-      this.onFailed
-    );
-    window.addEventListener("beforeunload", this.unLoadEvent);
-    this.timerId = setInterval(() => {
-      if (this.timer > 0) {
-        this.timer--;
-      }
-    }, 1000);
-    document.addEventListener("keyup", (e) => {
+    onKeyup(e) {
       if (this.myTurn === true) {
         let pressedKey = String(e.key);
         this.error = false;
@@ -437,7 +417,31 @@ export default {
           this.insertLetter(pressedKey);
         }
       }
-    });
+    },
+  },
+  mounted() {
+    this.roomId = sessionStorage.getItem("roomId");
+    this.me = sessionStorage.getItem("me");
+    this.opponent = sessionStorage.getItem("opponent");
+    const socket = new SockJs(
+      "https://mighty-basin-66401.herokuapp.com/socket"
+    );
+    this.stompClient = stomp.over(socket);
+    this.stompClient.connect(
+      { roomId: this.roomId, nickname: this.me },
+      this.onConnected,
+      this.onFailed
+    );
+    window.addEventListener("beforeunload", this.unLoadEvent);
+    this.timerId = setInterval(() => {
+      if (this.timer > 0) {
+        this.timer--;
+      }
+    }, 1000);
+    document.addEventListener("keyup", this.onKeyup);
+  },
+  beforeDestroy() {
+    document.removeEventListener("keyup", this.onKeyup);
   },
   beforeRouteLeave(to, from, next) {
     if (this.stompClient) {
