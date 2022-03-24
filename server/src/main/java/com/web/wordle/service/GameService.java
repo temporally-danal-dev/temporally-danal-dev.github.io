@@ -44,7 +44,8 @@ public class GameService {
 
             List<Word> wordList = gameDao.findAll();
             Collections.shuffle(wordList);
-            gameSession.setAnswer(wordList.get(0).getWord());
+            gameSession.setAnswer("test");
+            //gameSession.setAnswer(wordList.get(0).getWord());
         }
 
         gameList.put(roomId,gameSession);
@@ -78,7 +79,7 @@ public class GameService {
         for(int i = 0; i < answer.length(); i++){
             if(checked[i]== 2) continue;
             for(int j = 0; j < answer.length(); j++) {
-                if(checked[j] != 0 || matched[j]) continue;
+                if(matched[j]) continue;
                 if(input.charAt(i) == answer.charAt(j)) {
                     checked[i] = 1;
                     matched[j] = true;
