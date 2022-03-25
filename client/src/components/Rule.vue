@@ -25,13 +25,21 @@
           <ul>
             <li>Each turn has 90 seconds</li>
             <li>
+              If you don't submit your answer in time, <br />your answer will be
+              generated <strong>randomly</strong>
+            </li>
+            <li>
               Letter fited perfect will be painted
               <span style="color: green">Green</span>
             </li>
             <li>
-              Letter included in answer except letters painted green<br />
-              will be painted
+              Letter included in answer will be painted
               <span style="color: yellow">Yellow</span>
+            </li>
+            <li>
+              But if the number of letter in your submit is over<br />the number
+              of letter included in answer, <br />
+              It will be painted <span style="color: grey">Grey</span>
             </li>
             <li>
               Else, letter will be painted <span style="color: grey">Grey</span>
@@ -89,6 +97,7 @@ export default {
   right: auto;
   width: auto;
   height: auto;
+  z-index: 1;
 }
 
 .modalBody {
