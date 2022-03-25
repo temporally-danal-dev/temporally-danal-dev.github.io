@@ -235,7 +235,7 @@ export default {
             }
             if (body.nickname === "") {
               alert(
-                `The answer was ${body.word.toUpperCase()}, winner is ${winner}. Opponent left game`
+                `The answer was ${body.word.toUpperCase()}, Opponent left game`
               );
             } else {
               alert(
