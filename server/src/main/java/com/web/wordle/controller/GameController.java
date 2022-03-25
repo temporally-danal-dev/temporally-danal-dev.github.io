@@ -24,7 +24,7 @@ public class GameController {
 
     //join -> matching
     @MessageMapping("/{roomId}/join")
-    public void join(@DestinationVariable String roomId, JoinRequest req){
+    public synchronized void join(@DestinationVariable String roomId, JoinRequest req){
         log.info("JOIN");
         if(gameService.join(roomId,req).getPlayerList().size()==2){
             log.info("START");
