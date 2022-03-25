@@ -35,7 +35,7 @@ public class GameService {
         if(gameList.containsKey(roomId)){
             gameSession = gameList.get(roomId);
             gameSession.getPlayerList().add(req.getNickname());
-
+            log.info("join second : {}" , roomId);
         } else {
             gameSession = new GameSession();
             gameSession.getPlayerList().add(req.getNickname());
@@ -45,10 +45,10 @@ public class GameService {
             List<Word> wordList = gameDao.findAll();
             Collections.shuffle(wordList);
             gameSession.setAnswer(wordList.get(0).getWord());
+            log.info("join first : {}" , roomId);
         }
-
         gameList.put(roomId,gameSession);
-        return gameSession;
+        return gameList.get(roomId);
     }
 
     public void start(String roomId) {
