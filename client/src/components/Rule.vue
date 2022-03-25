@@ -25,6 +25,10 @@
           <ul>
             <li>Each turn has 90 seconds</li>
             <li>
+              If you don't submit your answer in time, <br />your answer will be
+              generated <strong>randomly</strong>
+            </li>
+            <li>
               Letter fited perfect will be painted
               <span style="color: green">Green</span>
             </li>
