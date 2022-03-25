@@ -98,6 +98,7 @@ export default {
       timerId: null,
       error: false,
       errorMsg: "",
+      startCnt: 0,
     };
   },
   methods: {
@@ -117,17 +118,20 @@ export default {
       }
     },
     onStart(res) {
-      const body = JSON.parse(res.body);
-      this.answerLength = body.answerLength;
-      if (body.nickname === this.me) {
-        this.myTurn = true;
-      } else {
-        this.myTurn = false;
+      if (this.startCnt === 0) {
+        const body = JSON.parse(res.body);
+        this.answerLength = body.answerLength;
+        if (body.nickname === this.me) {
+          this.myTurn = true;
+        } else {
+          this.myTurn = false;
+        }
+        const who = this.me !== body.nickname ? "Opponent's" : "Your";
+        this.timer = 90;
+        this.insertBox(who);
+        this.insertHint();
+        this.startCnt = 1;
       }
-      const who = this.me !== body.nickname ? "Opponent's" : "Your";
-      this.timer = 90;
-      this.insertBox(who);
-      this.insertHint();
     },
     onSubmit(res) {
       const body = JSON.parse(res.body);
@@ -229,9 +233,15 @@ export default {
             } else {
               winner = "Opponent";
             }
-            alert(
-              `The answer was ${body.word.toUpperCase()}, winner is ${winner}`
-            );
+            if (body.nickname === "") {
+              alert(
+                `The answer was ${body.word.toUpperCase()}, winner is ${winner}. Opponent left game`
+              );
+            } else {
+              alert(
+                `The answer was ${body.word.toUpperCase()}, winner is ${winner}`
+              );
+            }
             clearInterval(this.timerId);
             this.timerId = null;
             this.guessCount += 1;
@@ -442,6 +452,7 @@ export default {
   },
   beforeDestroy() {
     document.removeEventListener("keyup", this.onKeyup);
+    this.startCnt = 0;
   },
   beforeRouteLeave(to, from, next) {
     if (this.stompClient) {
