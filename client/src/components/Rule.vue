@@ -39,10 +39,11 @@
             <li>
               But if the number of letter in your submit is over<br />the number
               of letter included in answer, <br />
-              It will be painted <span style="color: grey">Grey</span>
+              Over letters will be painted <span style="color: grey">Grey</span>
             </li>
             <li>
-              Else, letter will be painted <span style="color: grey">Grey</span>
+              Else, letter not included in answer will be painted
+              <span style="color: grey">Grey</span>
             </li>
           </ul>
           <h2>Hint</h2>
